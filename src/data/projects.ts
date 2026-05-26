@@ -77,7 +77,7 @@ export const projects: Project[] = [
       "A prototype energy monitoring dashboard that visualizes power consumption data in real time — built to demonstrate extracting power data from an SDM via USB Bus.",
     tags: ["React", "NodeJS", "MySQL", "Python", "Charts"],
     image: {
-      src: "/images/smart-power.jpeg",
+      src: "/images/smartpower.png",
       alt: "SmartPower Monitor",
       overlayText: "Visit ↗",
     },
@@ -98,10 +98,10 @@ export const projects: Project[] = [
   {
     title: "Transformlit App",
     description:
-      "A mobile app published on Google Play Store —  a community helping users transform their reading habit through curated Christian literature.",
+      "A mobile app published on Google Play Store — a community helping users transform their reading habit through curated Christian literature.",
     tags: ["React Native", "NodeJS", "TypeScript", "MySQL", "Azure", "Android"],
     image: {
-      src: "/images/2_transformlit_app.jpg",
+      src: "/images/transformlit_app_old.jpg",
       alt: "Transformlit App",
       overlayText: "Play Store ↗",
       contain: true,
@@ -131,13 +131,13 @@ export const projects: Project[] = [
       overlayText: "Visit ↗",
     },
     primaryLink: {
-      href: "https://eventful-ph.netlify.app/",
+      href: "https://eventfulph.darjosh.dev/",
       label: "Visit ↗",
       title: "Live site",
     },
     links: [
       {
-        href: "https://eventful-ph.netlify.app/",
+        href: "https://eventfulph.darjosh.dev/",
         label: "↗",
         title: "Live site",
         ariaLabel: "Open Eventful live site",
