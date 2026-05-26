@@ -33,7 +33,7 @@ export const hero: HeroContent = {
     },
     {
       label: "View LinkedIn ↗",
-      href: "https://www.linkedin.com/in/daryllmagsombol",
+      href: "https://www.linkedin.com/in/daryll-magsombol",
       variant: "ghost",
       external: true,
     },
