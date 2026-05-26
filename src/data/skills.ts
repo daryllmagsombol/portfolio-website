@@ -1,0 +1,16 @@
+export const skills = [
+  "JavaScript",
+  "TypeScript",
+  "React",
+  "React Native",
+  "Redux",
+  "Node.js / AdonisJS",
+  "Python",
+  "GraphQL",
+  "SQL & NoSQL",
+  "AWS",
+  "Azure",
+  "Terraform",
+  "Git",
+  "Agile / Scrum",
+];
