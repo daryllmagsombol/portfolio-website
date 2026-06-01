@@ -8,9 +8,9 @@ export const skills = [
   "Python",
   "GraphQL",
   "SQL & NoSQL",
-  "AWS",
-  "Azure",
+  "AWS / Azure",
   "Terraform",
   "Git",
   "Agile / Scrum",
+  "AI Tools (Copilot / OpenCode)",
 ];

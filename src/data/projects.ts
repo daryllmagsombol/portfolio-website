@@ -5,7 +5,7 @@ export const projects: Project[] = [
     title: "Daryll & Hannah",
     description:
       "A custom-built wedding website for Hannah and me — showcasing our journey together, venue and schedule details, a photo gallery, and an online RSVP system for managing guest responses.",
-    tags: ["React", "NodeJS", "MySQL", "Azure"],
+    tags: ["React", "NodeJS", "MySQL", "Azure", "Cloudflare"],
     image: {
       src: "/images/1_wedding_site.png",
       alt: "Daryll and Hannah Wedding Site",
@@ -19,6 +19,71 @@ export const projects: Project[] = [
     links: [
       {
         href: "https://daryllandhannah.com",
+        label: "↗",
+        title: "Live site",
+      },
+    ],
+  },
+  {
+    title: "Blink Social",
+    description:
+      "Instagram-like social media platform built with NestJS, Next.js, PostgreSQL, and Prisma. Mono Repo via Turbo Repo. Vibe coded in OpenCode AI.",
+    tags: [
+      "Nest JS",
+      "Next JS",
+      "React",
+      "PostgreSQL",
+      "Prisma",
+      "Turbo Repo",
+      "OpenCode AI",
+      "Azure",
+    ],
+    image: {
+      src: "images/blink-social.jpg",
+      alt: "Blink Social",
+      overlayText: "Visit ↗",
+    },
+    primaryLink: {
+      href: "https://blink.darjosh.dev/",
+      label: "Visit ↗",
+      title: "Live site",
+    },
+    links: [
+      {
+        href: "https://blink.darjosh.dev/",
+        label: "↗",
+        title: "Live site",
+      },
+    ],
+  },
+  {
+    title: "Transformlit Community Site",
+    badge: "MVP",
+    description:
+      "A multi-tenant community platform built for reading groups, book clubs, and literary organizations. Warm, paper-toned design with group management, chat, announcements, and document sharing.",
+    tags: [
+      "Nest JS",
+      "Next JS",
+      "React",
+      "PostgreSQL",
+      "Prisma",
+      "Turbo Repo",
+      "Github Copilot",
+      "Azure",
+    ],
+    image: {
+      src: "images/transformlit-webapp-mvp.jpeg",
+      alt: "Transformlit Community Site",
+      overlayText: "Visit ↗",
+    },
+    primaryLink: {
+      href: "https://transformlit.darjosh.dev/",
+      label: "Visit ↗",
+      title: "Live site",
+    },
+    links: [
+      {
+        href: "https://transformlit.darjosh.dev/",
         label: "↗",
         title: "Live site",
       },
