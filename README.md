@@ -1,73 +1,47 @@
-# React + TypeScript + Vite
+# darjosh.dev — Portfolio 🚀
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Personal portfolio website built with **React 19 + TypeScript + Vite**. Showcases projects, experience, certifications, and skills. Deployed at [darjosh.dev](https://darjosh.dev).
 
-Currently, two official plugins are available:
+## Stack 🛠️
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **React 19** — UI
+- **TypeScript** — type safety
+- **Vite** — build tool
+- **Netlify** — hosting & deployment
 
-## React Compiler
+## Sections 📄
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Hero** 👋 — intro & social links
+- **Projects** 💻 — featured work (wedding site, event check-in, mobile app, etc.)
+- **Experience** 🏢 — 7+ years of software engineering roles
+- **About** 🙋 — background & skills
+- **Certifications** 🏅 — professional certs
+- **Contact** 📬 — get in touch
 
-## Expanding the ESLint configuration
+## Featured Projects ✨
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+| Project | Stack |
+|---|---|
+| [Daryll & Hannah](https://daryllandhannah.com) 💍 — Wedding site | React, Node.js, MySQL, Azure |
+| [IBMF Cantata Check-in](https://cantata.transformlit.com) 🎵 | React, Node.js, MySQL, Azure |
+| [SmartPower Monitor](https://smartpower.darjosh.dev) ⚡ | React, Node.js, MySQL, Python |
+| [Transformlit App](https://play.google.com/store/apps/details?id=com.transformlit.app) 📱 — Android | React Native, Node.js, TypeScript, Azure |
+| [Eventful PH](https://eventfulph.darjosh.dev) 🎉 — POC | React, JavaScript |
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Development 💻
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install      # install dependencies
+npm run dev      # start dev server
+npm run build    # type-check + build to dist/
+npm run preview  # preview production build
+npm run lint     # run ESLint
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Deployment 🌐
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Pushed to `main` → auto-deployed via Netlify. See [`netlify.toml`](netlify.toml) for build config.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Author 👨‍💻
+
+**Daryll Magsombol** — [LinkedIn](https://www.linkedin.com/in/daryll-magsombol)
