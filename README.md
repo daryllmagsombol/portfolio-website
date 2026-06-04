@@ -23,8 +23,11 @@ Personal portfolio website built with **React 19 + TypeScript + Vite**. Showcase
 | Project | Stack |
 |---|---|
 | [Daryll & Hannah](https://daryllandhannah.com) 💍 — Wedding site | React, Node.js, MySQL, Azure |
+| [Blink Social](https://blink.darjosh.dev) | NestJS, Next.js, PostgreSQL, Prisma, Azure |
+| [Transformlit Community Site](https://transformlit.darjosh.dev) 📚 — MVP | NestJS, Next.js, PostgreSQL, Prisma, Azure |
 | [IBMF Cantata Check-in](https://cantata.transformlit.com) 🎵 | React, Node.js, MySQL, Azure |
-| [SmartPower Monitor](https://smartpower.darjosh.dev) ⚡ | React, Node.js, MySQL, Python |
+| [IBMF Phils](https://ibmfphils.org/) — WordPress | WordPress, Elementor, JavaScript |
+| [SmartPower Monitor](https://smartpower.darjosh.dev) ⚡ — POC | React, Node.js, MySQL, Python |
 | [Transformlit App](https://play.google.com/store/apps/details?id=com.transformlit.app) 📱 — Android | React Native, Node.js, TypeScript, Azure |
 | [Eventful PH](https://eventfulph.darjosh.dev) 🎉 — POC | React, JavaScript |
 
