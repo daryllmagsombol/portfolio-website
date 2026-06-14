@@ -15,7 +15,7 @@ import { contactCta, contactDescription } from "./data/contact";
 import { experience } from "./data/experience";
 import { hero } from "./data/hero";
 import { navCta, navLinks } from "./data/nav";
-import { projects } from "./data/projects";
+import { projects, projectsGitHubNoteParts } from "./data/projects";
 import { sections } from "./data/sections";
 import { skills } from "./data/skills";
 import { socialLinks } from "./data/socials";
@@ -38,6 +38,9 @@ function App() {
                 <ProjectCard key={project.title} project={project} />
               ))}
             </div>
+            <p className="projects-note reveal">
+              <TextParts parts={projectsGitHubNoteParts} />
+            </p>
           </div>
         </section>
 

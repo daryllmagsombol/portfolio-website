@@ -1,4 +1,4 @@
-import type { Project } from "../types";
+import type { Project, TextPart } from "../types";
 
 export const projects: Project[] = [
   {
@@ -208,5 +208,18 @@ export const projects: Project[] = [
         ariaLabel: "Open Eventful live site",
       },
     ],
+  },
+];
+
+export const projectsGitHubNoteParts: TextPart[] = [
+  {
+    type: "text",
+    value: "More projects on my GitHub — always building. ",
+  },
+  {
+    type: "link",
+    value: "View all on GitHub ↗",
+    href: "https://github.com/daryllmagsombol?tab=repositories",
+    className: "accent",
   },
 ];

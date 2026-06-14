@@ -530,6 +530,17 @@ button {
   letter-spacing: 0.02em;
 }
 
+.projects-note {
+  margin-top: 1.5rem;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.projects-note a {
+  white-space: nowrap;
+}
+
 /* ========================================
    About
    ======================================== */
