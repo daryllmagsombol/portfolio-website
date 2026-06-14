@@ -39,7 +39,7 @@ export const projects: Project[] = [
       "Azure",
     ],
     image: {
-      src: "images/blink-social.jpg",
+      src: "images/blink-social.png",
       alt: "Blink Social",
       overlayText: "Visit ↗",
     },
