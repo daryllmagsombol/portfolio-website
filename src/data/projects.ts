@@ -168,19 +168,19 @@ export const projects: Project[] = [
     image: {
       src: "/images/transformlit_app_old.jpg",
       alt: "Transformlit App",
-      overlayText: "Play Store ↗",
+      overlayText: "APK Pure (delisted from Play Store) ↗",
       contain: true,
     },
     primaryLink: {
-      href: "https://play.google.com/store/apps/details?id=com.transformlit.app",
-      label: "Play Store ↗",
-      title: "Play Store",
+      href: "https://apkpure.net/transformlit-app/com.transformlit.app",
+      label: "APK Pure (delisted from Play Store) ↗",
+      title: "APK Pure",
     },
     links: [
       {
-        href: "https://play.google.com/store/apps/details?id=com.transformlit.app",
+        href: "https://apkpure.net/transformlit-app/com.transformlit.app",
         label: "↗",
-        title: "Play Store",
+        title: "APK Pure",
       },
     ],
   },
