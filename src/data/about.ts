@@ -53,7 +53,7 @@ export const aboutParagraphs: AboutParagraph[] = [
 
 export const aboutCta: ButtonLink = {
   label: "Say hello →",
-  href: "mailto:darylljoshuamagsombol@gmail.com",
+  href: "mailto:hello@darjosh.dev",
   variant: "primary",
 };
 
