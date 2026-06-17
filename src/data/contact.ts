@@ -5,6 +5,6 @@ export const contactDescription =
 
 export const contactCta: ButtonLink = {
   label: "Send me an email",
-  href: "mailto:darylljoshuamagsombol@gmail.com",
+  href: "mailto:hello@darjosh.dev",
   variant: "primary",
 };
