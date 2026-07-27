@@ -48,8 +48,8 @@ App
 ├── GridOverlay             ← Subtle grid pattern with radial mask (fixed)
 ├── WorldBackground         ← Active section's Three.js scene (R3F Canvas)
 ├── NavBar                  ← Refined; transparent → glass on scroll
-├── Sections (pinned by GSAP ScrollTrigger)
-│   ├── HeroSection         ← Cinematic void, particles, floating logos
+├── Sections
+│   ├── HeroSection         ← Cinematic void, particles, floating logos (pinned)
 │   ├── ProjectSection      ← Creative forge, neural grid, tilt glass cards
 │   ├── ExperienceSection   ← Professional timeline, warm shapes
 │   ├── AboutSection        ← Personal identity, split screen, morphing blobs
@@ -66,11 +66,12 @@ App
 
 ### Scroll Architecture
 
-1. GSAP ScrollTrigger pins each section in view sequentially
-2. Between sections, a color-morphing tween transitions `--section-bg`, `--section-accent`, `--section-glow` on `:root`
-3. Each section's Three.js scene fades in/out via opacity tween when it becomes active
-4. `WorldBackground` uses a single `<Canvas>` that swaps scene contents based on active section
-5. Smooth scroll via Lenis (matching the Modelverse reference) — preserves native scroll feel. ScrollTrigger integrates with Lenis via `lenis-scroll.js` plugin — Lenis overrides native scroll, ScrollTrigger listens to Lenis's virtual scroll position
+1. **GSAP ScrollTrigger pins Hero only** (the most impactful section for a fullscreen pinned intro). Pinning more than 1-2 sections degrades native scroll feel and mobile UX.
+2. Remaining sections use `scrub: 1` timelines with `start/end` triggers for reveals, NOT pinning.
+3. Between sections, a color-morphing tween transitions `--section-bg`, `--section-accent`, `--section-glow` on `:root` — triggered by scroll position markers.
+4. Each section's Three.js scene fades in/out via opacity tween when its scroll range is active.
+5. `WorldBackground` uses a single `<Canvas>` that swaps scene contents based on active section (lazy-loads scenes: only the upcoming ±1 scene is mounted at any time).
+6. Smooth scroll via Lenis (matching the Modelverse reference). ScrollTrigger integrates with Lenis via `lenis-scroll.js` plugin — Lenis overrides native scroll, ScrollTrigger listens to Lenis's virtual scroll position.
 
 ## Visual System
 
@@ -81,6 +82,9 @@ App
 | Space Grotesk | Body, headings, UI text | Google Fonts |
 | Fraunces | Hero display name / accent headlines | Google Fonts |
 | JetBrains Mono | Mono kickers (`// 01 · HERO`), tags, code | Google Fonts |
+| Inter | Body text fallback / UI labels (alternative to Space Grotesk for readability) | Google Fonts |
+
+Space Grotesk chosen for its cinematic, technical character matching the Modelverse reference. Inter available as fallback if body legibility needs improvement. Triple-stack (Space Grotesk + Inter + JetBrains Mono) validated by ui-ux-pro-max for Web3/developer dark-themed sites.
 
 ### Design Tokens
 
@@ -198,6 +202,14 @@ App
 - Button hover micro-interactions (scale, glow)
 - Navigation link hover underline
 
+### Animation Discipline
+
+- **Continuous animation** reserved exclusively for Three.js background scenes (low opacity, slow motion) — never for content UI elements
+- No decorative bounce/spin/pulse on icons, buttons, or cards (per ui-ux-pro-max: "continuous animation for loading indicators only")
+- All GSAP animations use `transform` and `opacity` only — never width/height/top/left (avoids layout thrash)
+- Scroll-triggered reveals use `toggleActions: 'play none none reverse'` to avoid re-triggering on scroll direction change
+- GSAP pinning limited to 1 section (Hero) to avoid fighting native scroll feel
+
 ### Three.js (Backgrounds)
 
 - **Hero:** Particle field (PointsGeometry, BufferAttribute position updates, mouse parallax)
@@ -207,7 +219,7 @@ App
 - **Certifications:** Sparkle particles (Points, upward drift, golden color)
 - **Contact:** Gradient orbs (multiple SphereGeometry with fragment shader color blending)
 
-All Three.js scenes mounted/unmounted via conditional render in a single `<Canvas>`; transitions cross-fade via opacity.
+All Three.js scenes mounted/unmounted via conditional render in a single `<Canvas>`; transitions cross-fade via opacity. Only the upcoming ±1 scene is mounted at any time (lazy mount). All scenes pause when `document.hidden` is true.
 
 ## Accessibility
 
@@ -223,9 +235,13 @@ All Three.js scenes mounted/unmounted via conditional render in a single `<Canva
 - Single Three.js `<Canvas>` reuses renderer (no mount/unmount overhead per scene)
 - Three.js scenes use low polygon counts and simple materials (no PBR, no shadows)
 - Particle systems limited to 300 points max
+- Three.js scenes are lazy-mounted: only the upcoming ±1 scene is in the DOM at any time; others are unmounted
+- Three.js scenes pause animation (via `useFrame` stop) when document.hidden is true (Page Visibility API) — continuous ambient animation that stops when not visible
 - GSAP ScrollTrigger: passive listeners, `scrub: 1` for smooth but not overburdened updates
+- GSAP pinning limited to 1 section (Hero) to avoid layout thrash per ui-ux-pro-max guidance
 - Tailwind: purge unused styles in production build
 - Lenis: requestAnimationFrame-based, paused when tab not visible
+- Continuous animations (Three.js backgrounds) kept at very low opacity/speed so they do not distract from content — never animate content UI elements continuously
 
 ## Responsive
 
