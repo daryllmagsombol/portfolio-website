@@ -25,7 +25,7 @@ Complete visual redesign of darjosh.dev into an immersive, scroll-reactive singl
 
 ## Content
 
-All content data files in `src/data/` remain **unchanged**. This is a presentation-only redesign. Content lives in:
+All content data files in `src/data/` remain **unchanged** (presentation-only redesign) with one exception: the `🚧` emoji in the projects note (`sections.ts`) should be replaced with a clean SVG icon or removed — emoji-as-icons contradict the cinematic technical aesthetic. This is a single-character data change that materially affects visual polish. Content lives in:
 - `src/data/hero.ts`
 - `src/data/projects.ts`
 - `src/data/experience.ts`
@@ -47,7 +47,7 @@ App
 ├── NoiseOverlay            ← SVG noise texture (fixed, ~5% opacity)
 ├── GridOverlay             ← Subtle grid pattern with radial mask (fixed)
 ├── WorldBackground         ← Active section's Three.js scene (R3F Canvas)
-├── NavBar                  ← Refined; transparent → glass on scroll
+├── NavBar                  ← Refined; consumes `--section-accent` for active link, GitHub button border, toggle icon
 ├── Sections
 │   ├── HeroSection         ← Cinematic void, particles, floating logos (pinned)
 │   ├── ProjectSection      ← Creative forge, neural grid, tilt glass cards
@@ -69,9 +69,10 @@ App
 1. **GSAP ScrollTrigger pins Hero only** (the most impactful section for a fullscreen pinned intro). Pinning more than 1-2 sections degrades native scroll feel and mobile UX.
 2. Remaining sections use `scrub: 1` timelines with `start/end` triggers for reveals, NOT pinning.
 3. Between sections, a color-morphing tween transitions `--section-bg`, `--section-accent`, `--section-glow` on `:root` — triggered by scroll position markers.
-4. Each section's Three.js scene fades in/out via opacity tween when its scroll range is active.
-5. `WorldBackground` uses a single `<Canvas>` that swaps scene contents based on active section (lazy-loads scenes: only the upcoming ±1 scene is mounted at any time).
-6. Smooth scroll via Lenis (matching the Modelverse reference). ScrollTrigger integrates with Lenis via `lenis-scroll.js` plugin — Lenis overrides native scroll, ScrollTrigger listens to Lenis's virtual scroll position.
+4. **Color interpolation uses GSAP's `gsap.utils.interpolate` with OKLCH color space** to avoid muddy intermediates when transitioning between section palettes (green→amber→purple→gold). Alternatively, use instant color swaps at section boundaries with a brief 200-300ms crossfade of Three.js scenes as a transition buffer.
+5. Each section's Three.js scene fades in/out via opacity tween when its scroll range is active.
+6. `WorldBackground` uses a single `<Canvas>` that swaps scene contents based on active section (lazy-loads scenes: only the upcoming ±1 scene is mounted at any time).
+7. Smooth scroll via Lenis (matching the Modelverse reference). ScrollTrigger integrates with Lenis via `lenis-scroll.js` plugin — Lenis overrides native scroll, ScrollTrigger listens to Lenis's virtual scroll position.
 
 ## Visual System
 
@@ -107,6 +108,14 @@ Space Grotesk chosen for its cinematic, technical character matching the Modelve
 }
 ```
 
+### Navbar
+
+- Transparent background pinned to top; gains glass blur (`rgba(255,255,255,0.04)` + `backdrop-filter: blur(12px)` + 1px bottom border) after scrolling past Hero
+- **Nav links consume `--section-accent`** — the active section's link uses `color: var(--section-accent)`, other links use muted text
+- GitHub CTA button border reads `border-color: var(--section-accent)` to adapt per world
+- Mobile hamburger toggle icon color adapts via `var(--section-accent)`
+- Logo text stays white (consistent anchor point)
+
 ### Shared Visual Elements
 
 | Element | Description |
@@ -116,8 +125,9 @@ Space Grotesk chosen for its cinematic, technical character matching the Modelve
 | Noise overlay | Fixed SVG fractal noise, 5% opacity, `mix-blend-mode: overlay`, pointer-events none |
 | Grid overlay | Fixed 72px grid, 2.5% opacity, radial-gradient mask fading edges, pointer-events none |
 | Cursor glow | Custom dot + trailing glow, color picks up `--section-accent`, hidden on touch |
-| Kicker labels | Mono uppercase, `letter-spacing: 0.35em`, ~11px, `--section-accent` like `// 02 · PROJECTS` |
-| 3D tilt cards | `perspective: 1200px`, mouse-driven rotateX/Y, radial highlight at cursor position |
+| Kicker labels | Mono uppercase, `--section-accent` like `// 02 · PROJECTS`. Responsive sizing: 11px/0.35em (≥900px), 10px/0.25em (≤900px), 9px/0.2em (≤700px) — prevents spacing gaps reducing legibility at small sizes. |
+| Section notes | Rendered as small glass panel below section content or inline tag (`.section-note`), `font-size: 0.85rem`, `color: text-muted` |
+| 3D tilt cards | `perspective: 1200px`, mouse-driven rotateX/Y, radial highlight at cursor position. Touch: static 2° CSS skew as visual hint (no JS tilt). Detection via `matchMedia('(hover: none)')`. reduced-motion: tilt removed entirely, cards render flat. |
 
 ## Section Worlds
 
@@ -126,7 +136,7 @@ Space Grotesk chosen for its cinematic, technical character matching the Modelve
 | Property | Value |
 |----------|-------|
 | Colors | `#050505` bg → `#00ff9d` accent |
-| Background | Three.js particle field (200-300 stars, slow drift, mouse parallax) + floating tech logo meshes (React, TypeScript, Node, Vite) orbiting at different z-depths |
+| Background | Three.js particle field (200-300 stars, slow drift, mouse parallax) + floating tech logo meshes (React, TypeScript, Node, Vite) orbiting at different z-depths. During unpin (last 200px of pin range): logos decelerate orbit via GSAP tween and fade to 0 opacity. After unpin: logos unmount with Hero scene. |
 | Layout | Fullscreen centered — greeting, huge name, typewriter role, description, CTA row |
 | Animations | Framer Motion fade-up headline, typewriter cycling roles, Three.js particles + orbit logos, scroll indicator fades out on scroll |
 | CTA buttons | Primary: green gradient `#00ff9d → #00cc7a`, Ghost: white border 20% opacity |
@@ -148,7 +158,7 @@ Space Grotesk chosen for its cinematic, technical character matching the Modelve
 |----------|-------|
 | Colors | `#1a0e06` bg → `#d97757` accent |
 | Background | Three.js warm organic low-poly shapes floating slowly |
-| Layout | Vertical timeline — left column (period + company), right column (role + bullets + tags), line connecting dots |
+| Layout | Timeline cards — period displayed as a sticky badge/header at top of each card, company + role as prominent header, bullets flowing below. Connecting line runs along left edge of cards with a dot at each entry's start. Card height accommodates multi-paragraph bullets (real experience data has 8+ lines per entry). |
 | Timeline | GSAP draws line (top→bottom), dots activate (pulse + glow) as entries enter view |
 | Animations | Slower editorial timing — entries fade in from left (x:-20, opacity:0), 0.8s ease, staggered |
 | Motion mood | Calm, refined, deliberate |
@@ -169,7 +179,7 @@ Space Grotesk chosen for its cinematic, technical character matching the Modelve
 |----------|-------|
 | Colors | `#1a1206` bg → `#f59e0b` accent |
 | Background | Three.js gold sparkle particles drifting upward |
-| Layout | 2-column card gallery — each card has badge image, title, issuer, date |
+| Layout | Single-column centered layout (only 1 cert in data). Single card centered with gold glow background. If more certs added later, switches to 2-column grid. Empty slots: glass panel with dashed border + "coming soon" text. |
 | Cards | Same 3D tilt as Projects; badge images get golden glow on hover |
 | Animations | GSAP stagger fade-up reveal, tilt on mousemove |
 
@@ -179,10 +189,10 @@ Space Grotesk chosen for its cinematic, technical character matching the Modelve
 |----------|-------|
 | Colors | `#050505` bg → all accents blending |
 | Background | Three.js gradient orbs cycling through green → amber → purple → gold |
-| Headline | "Let's Build **Something Great.** " — multi-color gradient text (all 4 accents) |
-| CTA | Gradient green→purple button, glow on hover |
-| Social links | Mono text, hover picks up cycling accent color |
-| Footer | Minimal credit line, small |
+| Headline | "Let's Build **Something Great.** " — static multi-color gradient text (all 4 accents combined, `background-clip: text`) — vibrant but stable, not cycling |
+| CTA | Gradient green→purple button (stable gradient), glow on hover |
+| Social links | Mono text, hover picks up a static accent color (not cycling — keeps interactive elements predictable) |
+| Footer | Minimal credit line, small. Includes back-to-top link/button ("↑ Back to top") — essential with Lenis smooth scroll for navigating back to Hero. |
 | Motion | Cinematic, calm — ambient color morph, no frantic animations |
 
 ## Animations
@@ -207,8 +217,10 @@ Space Grotesk chosen for its cinematic, technical character matching the Modelve
 - **Continuous animation** reserved exclusively for Three.js background scenes (low opacity, slow motion) — never for content UI elements
 - No decorative bounce/spin/pulse on icons, buttons, or cards (per ui-ux-pro-max: "continuous animation for loading indicators only")
 - All GSAP animations use `transform` and `opacity` only — never width/height/top/left (avoids layout thrash)
-- Scroll-triggered reveals use `toggleActions: 'play none none reverse'` to avoid re-triggering on scroll direction change
 - GSAP pinning limited to 1 section (Hero) to avoid fighting native scroll feel
+- Two animation trigger strategies used depending on type:
+  - **Scrub animations** (timeline draw, color morph): `toggleActions: 'play none none none'` + `scrub: 1` — animation state tied to scroll position
+  - **One-pass reveals** (stagger cards, entries): `toggleActions: 'play none none none'` with no reverse — elements appear once and stay visible; if user scrolls back up, they remain in their final state (no re-triggering, no reverse)
 
 ### Three.js (Backgrounds)
 
@@ -223,16 +235,23 @@ All Three.js scenes mounted/unmounted via conditional render in a single `<Canva
 
 ## Accessibility
 
-- `prefers-reduced-motion: reduce` — GSAP/Framer Motion animations disabled, Three.js scenes static (or hidden), all content immediately visible
+- `prefers-reduced-motion: reduce` — GSAP/Framer Motion animations disabled, Three.js scenes fully unmounted (not just frozen — saves GPU memory), CSS gradient backgrounds replace them. All content immediately visible.
 - All text/background pairs validated ≥ 4.5:1 contrast
 - Visible focus rings (section accent color) for keyboard navigation
-- Cursor glow hidden on touch devices (`hover: none` media query or `ontouchstart` check)
+- Cursor glow hidden on touch devices via `matchMedia('(hover: none)')` — correctly handles hybrid devices (iPad Pro + keyboard, Surface) that `ontouchstart` would misclassify
 - Semantic HTML sectioning and landmarks
 - Custom scrollbar retains native functionality; Lenis is accessibility-aware
 
 ## Performance
 
+### First-Load Sequence
+
+Hero content (greeting, name, typewriter) renders immediately with solid background color. SVG noise overlay renders next (CSS, zero cost). Three.js Canvas mounts and compiles shaders asynchronously (≤1500ms). Particle field fades in over 500ms once ready. Users never see a blank canvas.
+
+### Runtime
+
 - Single Three.js `<Canvas>` reuses renderer (no mount/unmount overhead per scene)
+- Project images converted to WebP/AVIF for glass overlay compositing quality; `image-rendering: auto` on card images
 - Three.js scenes use low polygon counts and simple materials (no PBR, no shadows)
 - Particle systems limited to 300 points max
 - Three.js scenes are lazy-mounted: only the upcoming ±1 scene is in the DOM at any time; others are unmounted
@@ -247,7 +266,16 @@ All Three.js scenes mounted/unmounted via conditional render in a single `<Canva
 
 - **Desktop-first** (optimize for "desktop wow-factor" per reference prompt)
 - Tablet (≤900px): sections stack vertically, split layouts collapse to single column, tilt effects simplified
-- Mobile (≤700px): Three.js backgrounds hidden (performance), animations simplified, timeline becomes stacked list
+- Mobile (≤700px): Three.js backgrounds hidden (performance), replaced by CSS gradient fallbacks:
+  - Hero: `radial-gradient(ellipse at center, #00ff9d15 0%, #050505 70%)`
+  - Projects: `radial-gradient(ellipse at 50% 0%, #00ff9d08 0%, #0a1a10 100%)`
+  - Experience: `radial-gradient(ellipse at 50% 100%, #d9775710 0%, #1a0e06 100%)`
+  - About: `radial-gradient(ellipse at center, #a78bfa0a 0%, #060d1a 100%)`
+  - Certifications: `radial-gradient(ellipse at center, #f59e0b08 0%, #1a1206 100%)`
+  - Contact: `radial-gradient(ellipse at center, #00ff9d08 0%, #050505 70%)`
+- Noise/grid overlays hidden on ≤700px (compositing cost without Three.js reward)
+- Animations simplified: stagger reveals remain (CSS class toggle), scroll-triggered color changes remain, tilt and Three.js removed
+- Timeline becomes stacked list (period badge above card, no connecting line)
 - Reduced star/particle counts on mobile via `useMediaQuery` or Three.js pixel ratio capping
 
 ## Migration
