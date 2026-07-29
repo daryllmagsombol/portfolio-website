@@ -1,34 +1,32 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 
-export function useActiveSection() {
-  const [activeId, setActiveId] = useState<string | null>(null);
+const SECTION_IDS = ["hero", "projects", "experience", "about", "certifications", "contact"];
+
+export function useActiveSection(): number {
+  const [active, setActive] = useState(0);
 
   useEffect(() => {
-    const sections = Array.from(
-      document.querySelectorAll<HTMLElement>("section[id]"),
-    );
+    const observers: IntersectionObserver[] = [];
 
-    if (!sections.length) {
-      return;
-    }
+    SECTION_IDS.forEach((id) => {
+      const el = document.getElementById(id);
+      if (!el) return;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
+      const observer = new IntersectionObserver(
+        ([entry]) => {
           if (entry.isIntersecting) {
-            setActiveId(entry.target.id);
+            const index = SECTION_IDS.indexOf(id);
+            if (index >= 0) setActive(index);
           }
-        });
-      },
-      { rootMargin: "-40% 0px -55% 0px" },
-    );
+        },
+        { threshold: 0.35 }
+      );
+      observer.observe(el);
+      observers.push(observer);
+    });
 
-    sections.forEach((section) => observer.observe(section));
-
-    return () => {
-      observer.disconnect();
-    };
+    return () => observers.forEach((o) => o.disconnect());
   }, []);
 
-  return activeId;
+  return active;
 }

@@ -2,24 +2,24 @@ import type { SectionHeaderData } from "../types";
 
 export const sections: Record<string, SectionHeaderData> = {
   projects: {
-    label: "01. work",
+    label: "work",
     title: "Projects",
-    note: "🚧 This section is a work in progress — more projects coming soon.",
+    note: "This section is a work in progress — more projects coming soon.",
   },
   experience: {
-    label: "02. experience",
+    label: "experience",
     title: "Work History",
   },
   about: {
-    label: "03. me",
+    label: "me",
     title: "About",
   },
   certifications: {
-    label: "04. credentials",
+    label: "credentials",
     title: "Certifications",
   },
   contact: {
-    label: "05. connect",
+    label: "connect",
     title: "Get In Touch",
   },
 };

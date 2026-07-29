@@ -1,0 +1,2 @@
+/* worlds.css — Section world color themes */
+.section-world { background-color: var(--section-bg); transition: background-color 0.6s ease; }

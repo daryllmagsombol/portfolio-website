@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import type { ExternalLink, NavLink } from "../types";
 import { useActiveSection } from "../hooks/useActiveSection";
-import { useScrollShadow } from "../hooks/useScrollShadow";
+
+const SECTION_IDS = ["hero", "projects", "experience", "about", "certifications", "contact"];
 
 type NavBarProps = {
   links: NavLink[];
@@ -9,53 +10,52 @@ type NavBarProps = {
 };
 
 export function NavBar({ links, cta }: NavBarProps) {
-  const isScrolled = useScrollShadow(20);
-  const activeId = useActiveSection();
+  const activeIndex = useActiveSection();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const navLinksRef = useRef<HTMLUListElement | null>(null);
   const toggleRef = useRef<HTMLButtonElement | null>(null);
 
+  // Scroll shadow detection
+  useEffect(() => {
+    const onScroll = () => setIsScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
+    return () => { document.body.style.overflow = ""; };
   }, [menuOpen]);
 
   useEffect(() => {
     const handleDocumentClick = (event: MouseEvent) => {
-      if (!menuOpen) {
-        return;
-      }
-
+      if (!menuOpen) return;
       const target = event.target as Node;
       const clickedLinks = navLinksRef.current?.contains(target);
       const clickedToggle = toggleRef.current?.contains(target);
-
-      if (!clickedLinks && !clickedToggle) {
-        setMenuOpen(false);
-      }
+      if (!clickedLinks && !clickedToggle) setMenuOpen(false);
     };
-
     document.addEventListener("click", handleDocumentClick);
-    return () => {
-      document.removeEventListener("click", handleDocumentClick);
-    };
+    return () => document.removeEventListener("click", handleDocumentClick);
   }, [menuOpen]);
 
-  const handleLinkClick = () => {
-    setMenuOpen(false);
+  const handleLinkClick = () => setMenuOpen(false);
+
+  const getHrefIndex = (href: string): number => {
+    const id = href.replace("#", "");
+    return SECTION_IDS.indexOf(id);
   };
 
   return (
     <header id="navbar" className={isScrolled ? "scrolled" : undefined}>
       <nav className="nav-inner">
         <a href="#hero" className="nav-logo" onClick={handleLinkClick}>
-          daryll<span className="accent">.</span>
+          daryll<span style={{ color: "var(--section-accent)" }}>.</span>
         </a>
         <ul className={`nav-links${menuOpen ? " open" : ""}`} ref={navLinksRef}>
           {links.map((link) => {
-            const isActive = activeId === link.href.slice(1);
+            const isActive = getHrefIndex(link.href) === activeIndex;
             return (
               <li key={link.href}>
                 <a
