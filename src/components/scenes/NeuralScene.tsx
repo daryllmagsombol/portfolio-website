@@ -1,32 +1,28 @@
-import { useRef, useMemo } from "react";
+import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
+const points: THREE.Vector3[] = [];
+for (let i = 0; i < 30; i++) {
+  points.push(new THREE.Vector3((Math.random() - 0.5) * 10, (Math.random() - 0.5) * 8, (Math.random() - 0.5) * 4));
+}
+
+const pairs: number[] = [];
+const nodes: number[] = [];
+for (let i = 0; i < points.length; i++) {
+  nodes.push(points[i].x, points[i].y, points[i].z);
+  for (let j = i + 1; j < points.length; j++) {
+    const dist = points[i].distanceTo(points[j]);
+    if (dist < 3) {
+      pairs.push(points[i].x, points[i].y, points[i].z, points[j].x, points[j].y, points[j].z);
+    }
+  }
+}
+const linePositions = new Float32Array(pairs);
+const nodePositions = new Float32Array(nodes);
+
 export function NeuralScene() {
-  const points = useMemo(() => {
-    const pts: THREE.Vector3[] = [];
-    for (let i = 0; i < 30; i++) {
-      pts.push(new THREE.Vector3((Math.random() - 0.5) * 10, (Math.random() - 0.5) * 8, (Math.random() - 0.5) * 4));
-    }
-    return pts;
-  }, []);
-
   const nodeRef = useRef<THREE.Points>(null!);
-
-  const [linePositions, nodePositions] = useMemo(() => {
-    const pairs: number[] = [];
-    const nodes: number[] = [];
-    for (let i = 0; i < points.length; i++) {
-      nodes.push(points[i].x, points[i].y, points[i].z);
-      for (let j = i + 1; j < points.length; j++) {
-        const dist = points[i].distanceTo(points[j]);
-        if (dist < 3) {
-          pairs.push(points[i].x, points[i].y, points[i].z, points[j].x, points[j].y, points[j].z);
-        }
-      }
-    }
-    return [new Float32Array(pairs), new Float32Array(nodes)];
-  }, [points]);
 
   useFrame(({ clock }) => {
     if (nodeRef.current) {

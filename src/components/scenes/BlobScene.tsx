@@ -5,15 +5,20 @@ import * as THREE from "three";
 export function BlobScene() {
   const blob1Ref = useRef<THREE.Mesh>(null!);
   const blob2Ref = useRef<THREE.Mesh>(null!);
+  const basePositions = useRef<Float32Array[]>([]);
 
   useFrame(({ clock }) => {
     const t = clock.getElapsedTime() * 0.3;
-    [blob1Ref, blob2Ref].forEach((ref) => {
+    [blob1Ref, blob2Ref].forEach((ref, bi) => {
       if (ref.current) {
         const geo = ref.current.geometry as THREE.SphereGeometry;
         const pos = geo.attributes.position;
+        if (!basePositions.current[bi]) {
+          basePositions.current[bi] = new Float32Array(pos.array);
+        }
+        const base = basePositions.current[bi];
         for (let i = 0; i < pos.count; i++) {
-          const x = pos.getX(i), y = pos.getY(i), z = pos.getZ(i);
+          const x = base[i * 3], y = base[i * 3 + 1], z = base[i * 3 + 2];
           const distort = 0.15 * Math.sin(x * 2 + t) * Math.cos(z * 2 + t * 0.7);
           pos.setXYZ(i, x, y + distort, z);
         }

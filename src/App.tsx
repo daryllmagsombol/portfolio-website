@@ -46,7 +46,7 @@ function App() {
           projects={projects}
           header={sections.projects}
           sectionIndex={1}
-          noteParts={projectsGitHubNoteParts as any}
+          noteParts={projectsGitHubNoteParts}
         />
         <ExperienceSection
           items={experience}
@@ -65,7 +65,7 @@ function App() {
           items={certifications}
           header={sections.certifications}
           sectionIndex={4}
-          noteParts={certificationsNoteParts as any}
+          noteParts={certificationsNoteParts}
         />
         <ContactSection
           description={contactDescription}

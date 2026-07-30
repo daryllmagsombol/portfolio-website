@@ -1,27 +1,24 @@
-import { useRef, useMemo } from "react";
+import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
-export function GoldParticlesScene() {
-  const count = 60;
-  const [positions, speeds] = useMemo(() => {
-    const pos = new Float32Array(count * 3);
-    const spd = new Float32Array(count);
-    for (let i = 0; i < count; i++) {
-      pos[i * 3] = (Math.random() - 0.5) * 8;
-      pos[i * 3 + 1] = (Math.random() - 0.5) * 6;
-      pos[i * 3 + 2] = (Math.random() - 0.5) * 4;
-      spd[i] = 0.1 + Math.random() * 0.3;
-    }
-    return [pos, spd];
-  }, []);
+const COUNT = 60;
+const positions = new Float32Array(COUNT * 3);
+const speeds = new Float32Array(COUNT);
+for (let i = 0; i < COUNT; i++) {
+  positions[i * 3] = (Math.random() - 0.5) * 8;
+  positions[i * 3 + 1] = (Math.random() - 0.5) * 6;
+  positions[i * 3 + 2] = (Math.random() - 0.5) * 4;
+  speeds[i] = 0.1 + Math.random() * 0.3;
+}
 
+export function GoldParticlesScene() {
   const ref = useRef<THREE.Points>(null!);
 
   useFrame(() => {
     if (ref.current) {
       const pos = ref.current.geometry.attributes.position;
-      for (let i = 0; i < count; i++) {
+      for (let i = 0; i < COUNT; i++) {
         const y = pos.array[i * 3 + 1] + speeds[i] * 0.005;
         pos.array[i * 3 + 1] = y > 3 ? -3 : y;
       }

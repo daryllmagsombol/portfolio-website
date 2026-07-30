@@ -1,4 +1,4 @@
-import { useRef, useCallback, useEffect, useState } from "react";
+import { useRef, useCallback, useState } from "react";
 
 type TiltCardProps = {
   children: React.ReactNode;
@@ -8,11 +8,7 @@ type TiltCardProps = {
 
 export function TiltCard({ children, className = "", sensitivity = 15 }: TiltCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
-  const [isHoverable, setIsHoverable] = useState(false);
-
-  useEffect(() => {
-    setIsHoverable(window.matchMedia("(hover: hover)").matches);
-  }, []);
+  const [isHoverable] = useState(() => window.matchMedia("(hover: hover)").matches);
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {

@@ -39,7 +39,7 @@ export function useScrollAnimation() {
     lenis.on("scroll", ScrollTrigger.update);
     // GSAP ticker passes time in seconds, but Lenis.raf() expects milliseconds
     const raf = (time: number) => lenis.raf(time * 1000);
-    (gsap.ticker as any).add(raf);
+    gsap.ticker.add(raf);
     gsap.ticker.lagSmoothing(0);
 
     // Refresh ScrollTrigger after fonts/layout settle
@@ -48,7 +48,7 @@ export function useScrollAnimation() {
     return () => {
       clearTimeout(refreshTimer);
       lenis.destroy();
-      (gsap.ticker as any).remove(raf);
+      gsap.ticker.remove(raf);
     };
   }, []);
 
