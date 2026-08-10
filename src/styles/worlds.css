@@ -9,30 +9,19 @@
    morphSectionColors 0.3s power1.out) — that JS morph is the SINGLE
    color-timing authority; there is deliberately no CSS transition here
    (background-image gradients are not transitionable anyway). */
-.section-world {
-  background-image: radial-gradient(
-    ellipse 90% 65% at 50% 0%,
-    color-mix(in srgb, var(--section-accent) 8%, transparent) 0%,
-    transparent 70%
-  );
-  background-color: color-mix(in srgb, var(--section-bg) 94%, transparent);
-}
 
-/* Per-section gradient placement (mirrors the spec §Responsive fallbacks) */
-#experience {
-  background-image: radial-gradient(
-    ellipse 90% 65% at 50% 100%,
-    color-mix(in srgb, var(--section-accent) 8%, transparent) 0%,
-    transparent 70%
-  );
-}
 
+/* Per-section radial tint: ellipse is deliberately oversized (130% × 100%)
+   so the gradient covers the full section height and bleeds beyond the
+   section edges — eliminates the hard cutoff where the old 90%×65%
+   ellipse ended. Transparent stop pushed to 85% for a softer falloff. */
+#experience,
 #about,
 #certifications,
 #contact {
   background-image: radial-gradient(
-    ellipse 90% 65% at 50% 50%,
+    ellipse 130% 100% at 50% 50%,
     color-mix(in srgb, var(--section-accent) 8%, transparent) 0%,
-    transparent 70%
+    transparent 85%
   );
 }
