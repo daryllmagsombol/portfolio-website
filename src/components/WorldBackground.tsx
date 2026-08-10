@@ -10,6 +10,7 @@ import { GoldParticlesScene } from "./scenes/GoldParticlesScene";
 import { ColorBlendScene } from "./scenes/ColorBlendScene";
 import { useSection } from "../context/useSection";
 import { startSceneInputs, stopSceneInputs } from "./scenes/sceneState";
+import { usePerfMode } from "../hooks/usePerformanceMode";
 
 /** Scene crossfade duration (brief: 150-400ms). */
 const FADE_MS = 300;
@@ -181,9 +182,14 @@ function useMediaQuery(query: string): boolean {
 export function WorldBackground() {
   const isReduced = useMediaQuery("(prefers-reduced-motion: reduce)");
   const isMobile = useMediaQuery("(max-width: 700px)");
+  const perfMode = usePerfMode();
 
+  // Skip the WebGL canvas entirely in low-power mode. R3F runs a continuous
+  // render loop and SixScene crossfades; even with dpr=[0.5,1.5] and
+  // antialias:false it dominates frame budget on throttled devices.
   if (isReduced) return null;
   if (isMobile) return null;
+  if (perfMode === "low") return null;
 
   return (
     <div className="pointer-events-none fixed inset-0 z-0">

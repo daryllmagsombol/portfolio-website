@@ -23,6 +23,7 @@ import { navLinks, navCta } from "./data/nav";
 import { useScrollAnimation } from "./hooks/useScrollAnimation";
 import { morphSectionColors } from "./hooks/useScrollAnimation";
 import { SectionProvider } from "./context/SectionContext";
+import { startPerfMonitor, stopPerfMonitor } from "./hooks/usePerformanceMode";
 import { useSection } from "./context/useSection";
 
 // Code-split the WebGL background: three.js + R3F are heavy (~1MB raw), and the
@@ -93,6 +94,14 @@ function AppContent() {
 
 function App() {
   useScrollAnimation();
+
+  // Start the adaptive perf monitor on mount; it auto-disables the WebGL
+  // canvas + Lenis smooth scroll + backdrop blur when frame rate drops or the
+  // device looks low-end.
+  useEffect(() => {
+    startPerfMonitor();
+    return () => stopPerfMonitor();
+  }, []);
 
   return (
     <>

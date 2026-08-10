@@ -109,6 +109,17 @@
   border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
+/* Adaptive perf-low: backdrop-filter blur is one of the most expensive
+   things a browser can do on a throttled GPU. usePerformanceMode flips
+   data-perf="low" on <html> when frame rate drops or the device looks
+   low-end; drop the blur entirely and let the translucent background
+   carry the visual. */
+:root[data-perf="low"] .glass,
+:root[data-perf="low"] .glass-bright {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
 /* Tag pill used in ProjectSection + ExperienceSection. Centralized so the
    color-mix() computation lives in one place and the per-render style attr
    can be removed. */

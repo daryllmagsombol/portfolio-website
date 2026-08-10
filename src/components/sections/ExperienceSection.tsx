@@ -3,6 +3,7 @@ import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { SectionHeader } from "../ui/SectionHeader";
 import { TextParts } from "../TextParts";
+import { usePerfMode } from "../../hooks/usePerformanceMode";
 import type { Experience, SectionHeaderData } from "../../types";
 
 type ExperienceSectionProps = {
@@ -15,6 +16,7 @@ export function ExperienceSection({ items, header, sectionIndex }: ExperienceSec
   const sectionRef = useRef<HTMLElement>(null!);
   const entriesRef = useRef<HTMLDivElement>(null!);
   const lineRef = useRef<HTMLDivElement>(null!);
+  const perfMode = usePerfMode();
 
   useGSAP(() => {
     const entries = entriesRef.current?.children;
@@ -36,18 +38,34 @@ export function ExperienceSection({ items, header, sectionIndex }: ExperienceSec
 
     mm.add("(prefers-reduced-motion: no-preference)", () => {
       if (entries) {
-        // Draw timeline line
-        gsap.from(lineRef.current, {
-          scaleY: 0,
-          transformOrigin: "top center",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 60%",
-            end: "bottom 20%",
-            scrub: 1,
-            toggleActions: "play none none none",
-          },
-        });
+        // Timeline line: in perf-low mode, render as a one-shot reveal so GSAP
+        // doesn't keep tracking scroll position on every wheel tick. The scrub
+        // version is the dominant scroll-time cost in the experience section.
+        if (perfMode === "low") {
+          gsap.from(lineRef.current, {
+            scaleY: 0,
+            transformOrigin: "top center",
+            duration: 0.8,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top 60%",
+              toggleActions: "play none none none",
+            },
+          });
+        } else {
+          gsap.from(lineRef.current, {
+            scaleY: 0,
+            transformOrigin: "top center",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top 60%",
+              end: "bottom 20%",
+              scrub: 1,
+              toggleActions: "play none none none",
+            },
+          });
+        }
 
         // Reveal entries
         gsap.from(entries, {

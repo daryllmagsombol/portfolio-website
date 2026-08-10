@@ -3,6 +3,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import { prefersReducedMotion, setLenis, setupAnchorSmoothing } from "./lenis";
+import { isPerfLow } from "./usePerformanceMode";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -52,10 +53,16 @@ export function useScrollAnimation() {
   const lenisRef = useRef<Lenis | null>(null);
 
   useEffect(() => {
-    // Reduced motion: skip Lenis entirely — native instant scrolling stays
-    // active. Anchor clicks fall back to the browser's instant jump
-    // (setupAnchorSmoothing no-ops when the singleton instance is null).
-    if (prefersReducedMotion()) {
+    // Reduced motion OR adaptive perf-low mode: skip Lenis entirely — native
+    // instant scrolling stays active. Lenis runs an rAF loop and tweens every
+    // wheel event, which drops frames hard on throttled / low-power devices.
+    // setupAnchorSmoothing no-ops when the singleton is null, so anchor clicks
+    // still get the native browser jump.
+    if (prefersReducedMotion() || isPerfLow()) {
+      // Throttle ScrollTrigger scroll callbacks to once per animation frame.
+      // Default behavior re-checks every trigger on every scroll event, which
+      // is the dominant scroll-time cost in perf-low mode.
+      ScrollTrigger.config({ limitCallbacks: true });
       return;
     }
 
