@@ -71,8 +71,8 @@ export function AboutSection({ paragraphs, skills, skillsTitle, cta, header, sec
   }, { scope: sectionRef });
 
   return (
-    <section id="about" ref={sectionRef} className="section-world section px-8 section-padding" style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
-      <div className="container mx-auto">
+    <section id="about" ref={sectionRef} className="section-world section px-8 section-padding" style={{ margin: "0 auto" }}>
+      <div className="container mx-auto" style={{ maxWidth: "var(--max-w)" }}>
         <SectionHeader {...header} index={sectionIndex} />
         <div className="grid grid-cols-1 space-2xl md:grid-cols-[1.2fr_1fr]">
           {/* Left: Bio */}

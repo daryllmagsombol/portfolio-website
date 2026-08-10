@@ -44,8 +44,8 @@ export function ProjectSection({ projects, header, sectionIndex, noteParts }: Pr
   }, { scope: sectionRef });
 
   return (
-    <section id="projects" ref={sectionRef} className="section-world section px-8 section-padding" style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
-      <div className="container mx-auto">
+    <section id="projects" ref={sectionRef} className="section-world section px-8 section-padding" style={{ margin: "0 auto" }}>
+      <div className="container relative mx-auto" style={{ maxWidth: "var(--max-w)" }}>
         <SectionHeader {...header} index={sectionIndex} />
         <div ref={cardsRef} className="relative z-0 grid grid-cols-1 gap-8 md:grid-cols-2">
           {projects.map((project) => (

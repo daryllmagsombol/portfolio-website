@@ -43,8 +43,8 @@ export function CertificationsSection({ items, header, sectionIndex, noteParts }
   }, { scope: sectionRef });
 
   return (
-    <section id="certifications" ref={sectionRef} className="section-world section px-8 section-padding" style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
-      <div className="container mx-auto">
+    <section id="certifications" ref={sectionRef} className="section-world section px-8 section-padding" style={{ margin: "0 auto" }}>
+      <div className="container mx-auto" style={{ maxWidth: "var(--max-w)" }}>
         <SectionHeader {...header} index={sectionIndex} />
 
         {items.length > 0 ? (

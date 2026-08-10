@@ -101,8 +101,8 @@ export function ExperienceSection({ items, header, sectionIndex }: ExperienceSec
   }, { scope: sectionRef });
 
   return (
-    <section id="experience" ref={sectionRef} className="section-world section px-8 section-padding" style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
-      <div className="container relative mx-auto">
+    <section id="experience" ref={sectionRef} className="section-world section px-8 section-padding" style={{ margin: "0 auto" }}>
+      <div className="container relative mx-auto"  style={{ maxWidth: "var(--max-w)" }}>
         <SectionHeader {...header} index={sectionIndex} />
 
         {/* Timeline line */}
