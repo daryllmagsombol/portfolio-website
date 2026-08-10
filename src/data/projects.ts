@@ -5,7 +5,7 @@ export const projects: Project[] = [
     title: "Daryll & Hannah",
     description:
       "A custom-built wedding website for Hannah and me — showcasing our journey together, venue and schedule details, a photo gallery, and an online RSVP system for managing guest responses.",
-    metric: "500+ RSVPs collected",
+    metric: "140+ RSVPs collected",
     tags: ["React", "NodeJS", "MySQL", "Azure", "Cloudflare"],
     image: {
       src: "/images/1_wedding_site.png",
@@ -148,7 +148,7 @@ export const projects: Project[] = [
     badge: "POC",
     description:
       "A prototype energy monitoring dashboard that visualizes power consumption data in real time — built to demonstrate extracting power data from an SDM via USB Bus.",
-    metric: "Real-time monitoring across 8 circuits",
+    metric: "Real-time monitoring across 3 IoT devices",
     tags: ["React", "NodeJS", "MySQL", "Python", "Charts"],
     image: {
       src: "/images/smartpower.png",
