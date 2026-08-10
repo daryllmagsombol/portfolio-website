@@ -8,11 +8,17 @@ type TiltCardProps = {
 
 export function TiltCard({ children, className = "", sensitivity = 15 }: TiltCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
-  const [isHoverable] = useState(() => window.matchMedia("(hover: hover)").matches);
+  // Tilt only on precise-pointer devices WITHOUT reduced motion. Touch devices
+  // get a static ~2° skew (spec's touch fallback); reduced-motion stays flat.
+  const [interaction] = useState(() => {
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const hoverable = window.matchMedia("(hover: hover)").matches;
+    return { hoverable: hoverable && !reduced, touchSkew: !hoverable && !reduced };
+  });
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
-      if (!cardRef.current || !isHoverable) return;
+      if (!cardRef.current || !interaction.hoverable) return;
       const rect = cardRef.current.getBoundingClientRect();
       const x = (e.clientX - rect.left) / rect.width - 0.5;
       const y = (e.clientY - rect.top) / rect.height - 0.5;
@@ -20,7 +26,7 @@ export function TiltCard({ children, className = "", sensitivity = 15 }: TiltCar
       cardRef.current.style.setProperty("--mx", `${(e.clientX - rect.left) / rect.width * 100}%`);
       cardRef.current.style.setProperty("--my", `${(e.clientY - rect.top) / rect.height * 100}%`);
     },
-    [isHoverable, sensitivity]
+    [interaction.hoverable, sensitivity]
   );
 
   const handleMouseLeave = useCallback(() => {
@@ -33,8 +39,13 @@ export function TiltCard({ children, className = "", sensitivity = 15 }: TiltCar
       ref={cardRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className={`tilt-card relative transition-transform duration-300 ${className}`}
-      style={{ transformStyle: "preserve-3d" }}
+      className={`tilt-card group relative transition-transform duration-300 ${className}`}
+      style={{
+        transformStyle: "preserve-3d",
+        ...(interaction.touchSkew
+          ? { transform: "perspective(1200px) rotateY(-2deg) rotateX(-1deg)" }
+          : {}),
+      }}
     >
       {children}
       <div

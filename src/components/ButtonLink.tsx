@@ -10,6 +10,7 @@ export function ButtonLink({
   href,
   variant,
   external,
+  ariaLabel,
   className,
   size = "default",
 }: ButtonLinkProps) {
@@ -25,7 +26,8 @@ export function ButtonLink({
       href={href}
       className={classes}
       target={isExternal ? "_blank" : undefined}
-      rel={isExternal ? "noopener" : undefined}
+      rel={isExternal ? "noopener noreferrer" : undefined}
+      aria-label={ariaLabel}
     >
       {label}
     </a>

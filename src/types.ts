@@ -14,6 +14,7 @@ export type ButtonLink = {
   href: string;
   variant: "primary" | "ghost";
   external?: boolean;
+  ariaLabel?: string;
 };
 
 export type ProjectLink = {
@@ -30,10 +31,16 @@ export type ProjectImage = {
   contain?: boolean;
 };
 
+export type SkillGroup = {
+  category: string;
+  items: string[];
+};
+
 export type Project = {
   title: string;
   badge?: string;
   description: string;
+  metric?: string;
   tags: string[];
   image: ProjectImage;
   primaryLink?: ProjectLink;

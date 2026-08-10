@@ -18,69 +18,88 @@ export function ExperienceSection({ items, header, sectionIndex }: ExperienceSec
 
   useGSAP(() => {
     const entries = entriesRef.current?.children;
-    if (entries) {
-      // Draw timeline line
-      gsap.from(lineRef.current, {
-        scaleY: 0,
-        transformOrigin: "top center",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 60%",
-          end: "bottom 20%",
-          scrub: 1,
-          toggleActions: "play none none none",
-        },
-      });
+    const mm = gsap.matchMedia();
 
-      // Reveal entries
-      gsap.from(entries, {
-        opacity: 0,
-        x: -20,
-        duration: 0.8,
-        stagger: 0.15,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 65%",
-          toggleActions: "play none none none",
-        },
-      });
+    mm.add("(prefers-reduced-motion: reduce)", () => {
+      // Final states, no tweens.
+      if (lineRef.current) {
+        gsap.set(lineRef.current, { scaleY: 1, transformOrigin: "top center" });
+      }
+      if (entries) {
+        gsap.set(entries, { opacity: 1, x: 0 });
+        Array.from(entries).forEach((entry) => {
+          const dot = entry.querySelector(".timeline-dot");
+          if (dot) gsap.set(dot, { scale: 1.3, opacity: 1 });
+        });
+      }
+    });
 
-      // Activate dots
-      Array.from(entries).forEach((entry) => {
-        const dot = entry.querySelector(".timeline-dot");
-        if (dot) {
-          gsap.to(dot, {
-            scale: 1.3,
-            opacity: 1,
-            scrollTrigger: {
-              trigger: entry,
-              start: "top 80%",
-              toggleActions: "play none none none",
-            },
-          });
-        }
-      });
-    }
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
+      if (entries) {
+        // Draw timeline line
+        gsap.from(lineRef.current, {
+          scaleY: 0,
+          transformOrigin: "top center",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 60%",
+            end: "bottom 20%",
+            scrub: 1,
+            toggleActions: "play none none none",
+          },
+        });
+
+        // Reveal entries
+        gsap.from(entries, {
+          opacity: 0,
+          x: -20,
+          duration: 0.8,
+          stagger: 0.15,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 65%",
+            toggleActions: "play none none none",
+          },
+        });
+
+        // Activate dots
+        Array.from(entries).forEach((entry) => {
+          const dot = entry.querySelector(".timeline-dot");
+          if (dot) {
+            gsap.to(dot, {
+              scale: 1.3,
+              opacity: 1,
+              scrollTrigger: {
+                trigger: entry,
+                start: "top 80%",
+                toggleActions: "play none none none",
+              },
+            });
+          }
+        });
+      }
+    });
   }, { scope: sectionRef });
 
   return (
-    <section id="experience" ref={sectionRef} className="section-world section px-8 py-28" style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
+    <section id="experience" ref={sectionRef} className="section-world section px-8 section-padding" style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
       <div className="container relative mx-auto">
         <SectionHeader {...header} index={sectionIndex} />
 
         {/* Timeline line */}
         <div
           ref={lineRef}
-          className="absolute left-[100px] top-0 h-full w-px origin-top"
+          className="absolute left-[100px] top-0 h-full w-px origin-top max-[700px]:hidden"
           style={{ background: `linear-gradient(to bottom, var(--section-accent), transparent)` }}
         />
 
-        <div ref={entriesRef} className="flex flex-col gap-6">
+        <div ref={entriesRef} className="flex flex-col gap-12 max-[700px]:gap-6">
           {items.map((item) => (
-            <div key={item.period} className="relative pl-[120px]">
-              {/* Dot */}
-              <div className="timeline-dot absolute left-[93px] top-1.5 h-[9px] w-[9px] rounded-full opacity-60" style={{ backgroundColor: "var(--section-accent)", boxShadow: `0 0 8px var(--section-accent)` }} />
+            <div key={item.period} className="relative pl-[140px] max-[700px]:pl-0">
+              {/* Dot — sits on the timeline line; tightened glow (4px) so the
+                  accent halo doesn't bleed into the period text to its right. */}
+              <div className="timeline-dot absolute left-[96px] top-1.5 h-[9px] w-[9px] rounded-full opacity-60 max-[700px]:hidden" style={{ backgroundColor: "var(--section-accent)", boxShadow: `0 0 4px var(--section-accent)` }} />
 
               {/* Period badge */}
               <div className="mb-1">
@@ -90,10 +109,10 @@ export function ExperienceSection({ items, header, sectionIndex }: ExperienceSec
               </div>
 
               {/* Card content */}
-              <div className="glass rounded-2xl p-6">
+              <div className="glass rounded-2xl card-padding-lg">
                 <p className="mb-1 text-sm text-[#9a9ab0]">{item.company}</p>
                 <p className="mb-4 text-base font-semibold text-[#f5f3ff]">{item.role}</p>
-                <ul className="mb-4 flex flex-col gap-2">
+                <ul className="mb-4 flex flex-col space-md">
                   {item.bullets.map((bullet, bi) => (
                     <li key={bi} className="pl-4 text-sm leading-relaxed text-[#a1a1b5]" style={{ position: "relative" }}>
                       <span className="absolute left-0 text-xs" style={{ color: "var(--section-accent)" }}>▹</span>
@@ -101,7 +120,7 @@ export function ExperienceSection({ items, header, sectionIndex }: ExperienceSec
                     </li>
                   ))}
                 </ul>
-                <div className="flex flex-wrap gap-1.5">
+                <div className="flex flex-wrap space-sm">
                   {item.tags.map((tag) => (
                     <span
                       key={tag}

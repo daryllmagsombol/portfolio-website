@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
+import { setSceneAccent } from "./sceneState";
 
 const COUNT = 60;
 const positions = new Float32Array(COUNT * 3);
@@ -14,8 +15,14 @@ for (let i = 0; i < COUNT; i++) {
 
 export function GoldParticlesScene() {
   const ref = useRef<THREE.Points>(null!);
+  const matRef = useRef<THREE.PointsMaterial>(null!);
+  const accent = useRef(new THREE.Color());
 
   useFrame(() => {
+    setSceneAccent(accent.current);
+    if (matRef.current) {
+      matRef.current.color.copy(accent.current);
+    }
     if (ref.current) {
       const pos = ref.current.geometry.attributes.position;
       for (let i = 0; i < COUNT; i++) {
@@ -31,7 +38,7 @@ export function GoldParticlesScene() {
       <bufferGeometry>
         <bufferAttribute attach="attributes-position" args={[positions, 3]} />
       </bufferGeometry>
-      <pointsMaterial color="#f59e0b" size={0.04} transparent opacity={0.4} sizeAttenuation />
+      <pointsMaterial ref={matRef} color="#f59e0b" size={0.04} transparent opacity={0.4} sizeAttenuation />
     </points>
   );
 }

@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
+import { setSceneAccent } from "./sceneState";
 
 const points: THREE.Vector3[] = [];
 for (let i = 0; i < 30; i++) {
@@ -23,12 +24,19 @@ const nodePositions = new Float32Array(nodes);
 
 export function NeuralScene() {
   const nodeRef = useRef<THREE.Points>(null!);
+  const lineMatRef = useRef<THREE.LineBasicMaterial>(null!);
+  const nodeMatRef = useRef<THREE.PointsMaterial>(null!);
+  const accent = useRef(new THREE.Color());
 
   useFrame(({ clock }) => {
-    if (nodeRef.current) {
+    setSceneAccent(accent.current);
+    if (nodeMatRef.current) {
       // Pulse all node sizes uniformly via PointsMaterial.size
-      const mat = nodeRef.current.material as THREE.PointsMaterial;
-      mat.size = 0.06 + Math.sin(clock.getElapsedTime() * 0.5) * 0.02;
+      nodeMatRef.current.size = 0.06 + Math.sin(clock.getElapsedTime() * 0.5) * 0.02;
+      nodeMatRef.current.color.copy(accent.current);
+    }
+    if (lineMatRef.current) {
+      lineMatRef.current.color.copy(accent.current);
     }
   });
 
@@ -39,14 +47,14 @@ export function NeuralScene() {
           <bufferGeometry>
             <bufferAttribute attach="attributes-position" args={[linePositions, 3]} />
           </bufferGeometry>
-          <lineBasicMaterial color="#00ff9d" transparent opacity={0.08} />
+          <lineBasicMaterial ref={lineMatRef} color="#00ff9d" transparent opacity={0.08} />
         </lineSegments>
       )}
       <points ref={nodeRef}>
         <bufferGeometry>
           <bufferAttribute attach="attributes-position" args={[nodePositions, 3]} />
         </bufferGeometry>
-        <pointsMaterial color="#00ff9d" size={0.06} transparent opacity={0.3} sizeAttenuation />
+        <pointsMaterial ref={nodeMatRef} color="#00ff9d" size={0.06} transparent opacity={0.3} sizeAttenuation />
       </points>
     </group>
   );

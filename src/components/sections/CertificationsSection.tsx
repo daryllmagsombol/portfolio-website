@@ -17,22 +17,33 @@ export function CertificationsSection({ items, header, sectionIndex, noteParts }
   const sectionRef = useRef<HTMLElement>(null!);
 
   useGSAP(() => {
-    gsap.from(sectionRef.current?.querySelectorAll(".cert-card"), {
-      opacity: 0,
-      y: 20,
-      duration: 0.5,
-      stagger: 0.1,
-      ease: "power2.out",
-      scrollTrigger: {
-        trigger: sectionRef.current,
-        start: "top 75%",
-        toggleActions: "play none none none",
-      },
+    const certCards = sectionRef.current?.querySelectorAll(".cert-card");
+    const mm = gsap.matchMedia();
+
+    mm.add("(prefers-reduced-motion: reduce)", () => {
+      if (certCards) gsap.set(certCards, { opacity: 1, y: 0 });
+    });
+
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
+      if (certCards) {
+        gsap.from(certCards, {
+          opacity: 0,
+          y: 20,
+          duration: 0.5,
+          stagger: 0.1,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 75%",
+            toggleActions: "play none none none",
+          },
+        });
+      }
     });
   }, { scope: sectionRef });
 
   return (
-    <section id="certifications" ref={sectionRef} className="section-world section px-8 py-28" style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
+    <section id="certifications" ref={sectionRef} className="section-world section px-8 section-padding" style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
       <div className="container mx-auto">
         <SectionHeader {...header} index={sectionIndex} />
 
@@ -44,7 +55,7 @@ export function CertificationsSection({ items, header, sectionIndex, noteParts }
                   href={item.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="cert-card glass flex items-center gap-4 rounded-2xl p-5 transition-colors"
+                  className="cert-card glass flex items-center space-md rounded-2xl card-padding transition-colors"
                   style={{ borderColor: "color-mix(in srgb, var(--section-accent) 20%, transparent)" }}
                 >
                   <img

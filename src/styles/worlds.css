@@ -1,2 +1,38 @@
 /* worlds.css — Section world color themes */
-.section-world { background-color: var(--section-bg); transition: background-color 0.6s ease; }
+
+/* C1: translucent per-section radial tint over the section's own background
+   so the fixed WebGL canvas (z-0, behind <main> z-10) shows through the
+   sections. Uses var(--section-bg) (which GSAP morphs to the section's
+   oklch color) instead of hardcoded near-black — otherwise sections with
+   warm/cool accents end up darker than the surrounding body.
+   The tint derives from the JS-morphed --section-accent (oklch, tweens in
+   morphSectionColors 0.3s power1.out) — that JS morph is the SINGLE
+   color-timing authority; there is deliberately no CSS transition here
+   (background-image gradients are not transitionable anyway). */
+.section-world {
+  background-image: radial-gradient(
+    ellipse 90% 65% at 50% 0%,
+    color-mix(in srgb, var(--section-accent) 8%, transparent) 0%,
+    transparent 70%
+  );
+  background-color: color-mix(in srgb, var(--section-bg) 94%, transparent);
+}
+
+/* Per-section gradient placement (mirrors the spec §Responsive fallbacks) */
+#experience {
+  background-image: radial-gradient(
+    ellipse 90% 65% at 50% 100%,
+    color-mix(in srgb, var(--section-accent) 8%, transparent) 0%,
+    transparent 70%
+  );
+}
+
+#about,
+#certifications,
+#contact {
+  background-image: radial-gradient(
+    ellipse 90% 65% at 50% 50%,
+    color-mix(in srgb, var(--section-accent) 8%, transparent) 0%,
+    transparent 70%
+  );
+}

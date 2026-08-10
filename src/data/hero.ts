@@ -32,10 +32,11 @@ export const hero: HeroContent = {
       variant: "primary",
     },
     {
-      label: "View LinkedIn ↗",
+      label: "Connect on LinkedIn",
       href: "https://www.linkedin.com/in/daryll-magsombol",
       variant: "ghost",
       external: true,
+      ariaLabel: "Connect with me on LinkedIn (opens in new tab)",
     },
   ],
 };

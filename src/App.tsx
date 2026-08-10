@@ -1,8 +1,7 @@
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { CursorGlow } from "./components/CursorGlow";
 import { NoiseOverlay } from "./components/NoiseOverlay";
 import { GridOverlay } from "./components/GridOverlay";
-import { WorldBackground } from "./components/WorldBackground";
 import { NavBar } from "./components/NavBar";
 import { Footer } from "./components/Footer";
 import { HeroSection } from "./components/sections/HeroSection";
@@ -22,12 +21,23 @@ import { socialLinks } from "./data/socials";
 import { sections } from "./data/sections";
 import { navLinks, navCta } from "./data/nav";
 import { useScrollAnimation } from "./hooks/useScrollAnimation";
-import { useActiveSection } from "./hooks/useActiveSection";
 import { morphSectionColors } from "./hooks/useScrollAnimation";
+import { SectionProvider } from "./context/SectionContext";
+import { useSection } from "./context/useSection";
 
-function App() {
-  useScrollAnimation();
-  const activeSection = useActiveSection();
+// Code-split the WebGL background: three.js + R3F are heavy (~1MB raw), and the
+// canvas is decorative — it must not block first paint. The chunk loads lazily
+// on idle; Suspense keeps a null placeholder so layout is unaffected.
+const WorldBackground = lazy(() =>
+  import("./components/WorldBackground").then((m) => ({ default: m.WorldBackground }))
+);
+
+/**
+ * Inner App that reads the active section from SectionContext (single observer
+ * owned by SectionProvider) and triggers the per-section color morph.
+ */
+function AppContent() {
+  const activeSection = useSection();
 
   useEffect(() => {
     morphSectionColors(activeSection);
@@ -35,12 +45,13 @@ function App() {
 
   return (
     <>
-      <CursorGlow />
       <NoiseOverlay />
       <GridOverlay />
-      <WorldBackground />
+      <Suspense fallback={null}>
+        <WorldBackground />
+      </Suspense>
       <NavBar links={navLinks} cta={navCta} />
-      <main className="relative z-10">
+      <main id="main" className="relative z-10">
         <HeroSection content={hero} />
         <ProjectSection
           projects={projects}
@@ -76,6 +87,23 @@ function App() {
         />
       </main>
       <Footer />
+    </>
+  );
+}
+
+function App() {
+  useScrollAnimation();
+
+  return (
+    <>
+      {/* Skip link: first focusable element, hidden until focused. */}
+      <a href="#main" className="skip-link">
+        Skip to content
+      </a>
+      <CursorGlow />
+      <SectionProvider>
+        <AppContent />
+      </SectionProvider>
     </>
   );
 }
