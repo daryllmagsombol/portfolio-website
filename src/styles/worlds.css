@@ -11,17 +11,17 @@
    (background-image gradients are not transitionable anyway). */
 
 
-/* Per-section radial tint: ellipse is deliberately oversized (130% × 100%)
-   so the gradient covers the full section height and bleeds beyond the
-   section edges — eliminates the hard cutoff where the old 90%×65%
-   ellipse ended. Transparent stop pushed to 85% for a softer falloff. */
+/* Per-section radial tint: oversized ellipse avoids the hard cutoff that
+   the old 90%×65% caused, but accent kept to 4% so the tint stays a
+   whisper — just enough to break the flat black without competing with
+   content. Transparent stop at 90% for a long, gentle falloff. */
 #experience,
 #about,
 #certifications,
 #contact {
   background-image: radial-gradient(
     ellipse 130% 100% at 50% 50%,
-    color-mix(in srgb, var(--section-accent) 8%, transparent) 0%,
-    transparent 85%
+    color-mix(in srgb, var(--section-accent) 4%, transparent) 0%,
+    transparent 90%
   );
 }
