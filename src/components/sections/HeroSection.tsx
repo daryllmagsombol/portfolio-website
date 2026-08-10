@@ -40,7 +40,7 @@ export function HeroSection({ content }: HeroSectionProps) {
   });
 
   return (
-    <section id="hero" className="relative flex min-h-screen flex-col justify-center px-8 pt-20" style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
+    <section id="hero" className="hero-stars relative flex min-h-screen flex-col justify-center px-8 pt-20" style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
       <div ref={entranceRef}>
         <p className="kicker mb-3">{content.greeting}</p>
         <h1 className="font-serif text-[clamp(2.5rem,6vw,5rem)] font-semibold leading-[1.05] tracking-tight text-[#f5f3ff]">

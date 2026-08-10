@@ -89,12 +89,12 @@ export function AboutSection({ paragraphs, skills, skillsTitle, cta, header, sec
 
           {/* Right: Skills */}
           <div ref={rightRef}>
-            <h3 className="kicker mb-4">{skillsTitle}</h3>
+            <h3 className="kicker mb-3">{skillsTitle}</h3>
             <div className="space-lg">
               {skills.map((group) => (
                 <div key={group.category}>
-                  <h4 className="kicker mb-2">{group.category}</h4>
-                  <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-3">
+                  <h4 className="kicker mt-2 mb-2">{group.category}</h4>
+                  <div className="grid grid-cols-2 gap-2 sm:gap-3">
                     {group.items.map((skill) => (
                       <div
                         key={skill}

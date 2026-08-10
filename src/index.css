@@ -120,6 +120,42 @@
   -webkit-backdrop-filter: none;
 }
 
+/* CSS star field — lightweight visual decoration for the hero section.
+   Always renders (no WebGL cost), so it stays visible on mobile and on
+   low-power devices where the R3F canvas is gated off. Subtle radial-
+   gradient dots with a slow twinkle, positioned via a single pseudo-
+   element so it costs zero extra DOM nodes. */
+.hero-stars {
+  position: relative;
+  overflow: hidden;
+}
+.hero-stars::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-repeat: no-repeat;
+  opacity: 0.55;
+  background-image:
+    radial-gradient(1.5px 1.5px at 12% 22%, var(--section-accent), transparent 60%),
+    radial-gradient(1px 1px at 38% 64%, #ffffff, transparent 60%),
+    radial-gradient(1.5px 1.5px at 67% 18%, var(--section-accent), transparent 60%),
+    radial-gradient(1px 1px at 82% 48%, #ffffff, transparent 60%),
+    radial-gradient(1.25px 1.25px at 8% 78%, #ffffff, transparent 60%),
+    radial-gradient(1px 1px at 29% 42%, var(--section-accent), transparent 60%),
+    radial-gradient(1.5px 1.5px at 54% 88%, #ffffff, transparent 60%),
+    radial-gradient(1px 1px at 92% 12%, var(--section-accent), transparent 60%),
+    radial-gradient(1.25px 1.25px at 47% 8%, #ffffff, transparent 60%),
+    radial-gradient(1px 1px at 73% 72%, var(--section-accent), transparent 60%),
+    radial-gradient(1.5px 1.5px at 21% 56%, #ffffff, transparent 60%),
+    radial-gradient(1px 1px at 88% 32%, var(--section-accent), transparent 60%);
+  animation: hero-twinkle 6s ease-in-out infinite;
+}
+@keyframes hero-twinkle {
+  0%, 100% { opacity: 0.35; }
+  50%      { opacity: 0.75; }
+}
+
 /* Tag pill used in ProjectSection + ExperienceSection. Centralized so the
    color-mix() computation lives in one place and the per-render style attr
    can be removed. */

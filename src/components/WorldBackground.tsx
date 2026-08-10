@@ -181,14 +181,17 @@ function useMediaQuery(query: string): boolean {
 
 export function WorldBackground() {
   const isReduced = useMediaQuery("(prefers-reduced-motion: reduce)");
-  const isMobile = useMediaQuery("(max-width: 700px)");
   const perfMode = usePerfMode();
 
-  // Skip the WebGL canvas entirely in low-power mode. R3F runs a continuous
-  // render loop and SixScene crossfades; even with dpr=[0.5,1.5] and
-  // antialias:false it dominates frame budget on throttled devices.
+  // Skip the WebGL canvas entirely when:
+  //   - the user prefers reduced motion (accessibility)
+  //   - the adaptive perf monitor flagged low-power mode (low-end devices,
+  //     throttled devices, or sustained frame drops)
+  // We deliberately do NOT gate on viewport width: high-end phones handle
+  // the canvas fine, and the perf monitor catches thermal throttling after
+  // ~2s. A flat mobile-skip would hide the world effects from every mobile
+  // visitor regardless of capability.
   if (isReduced) return null;
-  if (isMobile) return null;
   if (perfMode === "low") return null;
 
   return (
