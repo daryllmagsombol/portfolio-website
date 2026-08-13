@@ -29,6 +29,8 @@ jobs:
         uses: SonarSource/sonarqube-scan-action@v7
         with:
           args: >
+            -Dsonar.projectKey=portfolio-website
+            -Dsonar.projectName=portfolio-website
             -Dsonar.branch.name=${{ github.ref_name }}
             -Dsonar.qualitygate.wait=true
         env:
