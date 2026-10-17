@@ -19,7 +19,7 @@ jobs:
           OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          model: opencode/deepseek-v4-flash-free
+          model: opencode/deepseek-v4.1-flash-free
           use_github_token: true
           prompt: |
             Review this pull request.
