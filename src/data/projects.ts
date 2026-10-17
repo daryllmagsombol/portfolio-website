@@ -27,6 +27,36 @@ export const projects: Project[] = [
     ],
   },
   {
+    title: "PPCRV Election Monitoring",
+    description:
+      "An election analytics dashboard with vote completion maps, location-based exploration, and vote distribution charts.",
+    tags: ["Next.js", "TypeScript", "Tailwind CSS", "AWS", "DuckDB"],
+    image: {
+      src: "/images/ppcrv-election-monitoring.jpg",
+      alt: "PPCRV BARMM election analytics with a vote completion map and vote distribution chart",
+      overlayText: "Visit ↗",
+    },
+    primaryLink: {
+      href: "https://results.ppcrv.org/analytics",
+      label: "Visit ↗",
+      title: "Live site",
+    },
+    links: [
+      {
+        href: "https://results.ppcrv.org/analytics",
+        label: "↗",
+        title: "Live site",
+        ariaLabel: "Open PPCRV Election Monitoring live site",
+      },
+      {
+        href: "https://github.com/daryllmagsombol/ppcrv-election-monitoring",
+        label: "GitHub ↗",
+        title: "GitHub repository",
+        ariaLabel: "View PPCRV Election Monitoring on GitHub",
+      },
+    ],
+  },
+  {
     title: "Blink Social",
     description:
       "Instagram-like social media platform built with NestJS, Next.js, PostgreSQL, and Prisma. Mono Repo via Turbo Repo. Built with OpenCode AI.",
@@ -77,8 +107,8 @@ export const projects: Project[] = [
       "Azure",
     ],
     image: {
-      src: "images/transformlit-webapp-mvp.jpeg",
-      alt: "Transformlit Community Site",
+      src: "/images/transformlit-community-feed.jpg",
+      alt: "TransformLit community feed with a verse of the day, group updates, and announcements",
       overlayText: "Visit ↗",
     },
     primaryLink: {

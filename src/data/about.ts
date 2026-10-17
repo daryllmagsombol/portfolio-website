@@ -35,6 +35,21 @@ export const aboutParagraphs: AboutParagraph[] = [
       {
         type: "text",
         value:
+          "I use specialized AI assistants to research, build, review, and verify software, while staying responsible for the decisions and what ships. ",
+      },
+      {
+        type: "link",
+        value: "See my AI-assisted workflow ↗",
+        href: "https://ai.darjosh.dev/",
+        className: "accent",
+      },
+    ],
+  },
+  {
+    parts: [
+      {
+        type: "text",
+        value:
           "Outside of the day job, I volunteer as a full-stack developer for ",
       },
       {
