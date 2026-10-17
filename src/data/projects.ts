@@ -5,6 +5,7 @@ export const projects: Project[] = [
     title: "Daryll & Hannah",
     description:
       "A custom-built wedding website for Hannah and me — showcasing our journey together, venue and schedule details, a photo gallery, and an online RSVP system for managing guest responses.",
+    metric: "140+ RSVPs collected",
     tags: ["React", "NodeJS", "MySQL", "Azure", "Cloudflare"],
     image: {
       src: "/images/1_wedding_site.png",
@@ -21,13 +22,45 @@ export const projects: Project[] = [
         href: "https://daryllandhannah.com",
         label: "↗",
         title: "Live site",
+        ariaLabel: "Open Daryll & Hannah in new tab",
+      },
+    ],
+  },
+  {
+    title: "PPCRV Election Monitoring",
+    description:
+      "An election analytics dashboard with vote completion maps, location-based exploration, and vote distribution charts.",
+    tags: ["Next.js", "TypeScript", "Tailwind CSS", "AWS", "DuckDB"],
+    image: {
+      src: "/images/ppcrv-election-monitoring.jpg",
+      alt: "PPCRV BARMM election analytics with a vote completion map and vote distribution chart",
+      overlayText: "Visit ↗",
+    },
+    primaryLink: {
+      href: "https://results.ppcrv.org/analytics",
+      label: "Visit ↗",
+      title: "Live site",
+    },
+    links: [
+      {
+        href: "https://results.ppcrv.org/analytics",
+        label: "↗",
+        title: "Live site",
+        ariaLabel: "Open PPCRV Election Monitoring live site",
+      },
+      {
+        href: "https://github.com/daryllmagsombol/ppcrv-election-monitoring",
+        label: "GitHub ↗",
+        title: "GitHub repository",
+        ariaLabel: "View PPCRV Election Monitoring on GitHub",
       },
     ],
   },
   {
     title: "Blink Social",
     description:
-      "Instagram-like social media platform built with NestJS, Next.js, PostgreSQL, and Prisma. Mono Repo via Turbo Repo. Vibe coded in OpenCode AI.",
+      "Instagram-like social media platform built with NestJS, Next.js, PostgreSQL, and Prisma. Mono Repo via Turbo Repo. Built with OpenCode AI.",
+    metric: "Multi-tenant architecture",
     tags: [
       "Nest JS",
       "Next JS",
@@ -53,6 +86,7 @@ export const projects: Project[] = [
         href: "https://blink.darjosh.dev/",
         label: "↗",
         title: "Live site",
+        ariaLabel: "Open Blink Social in new tab",
       },
     ],
   },
@@ -61,6 +95,7 @@ export const projects: Project[] = [
     badge: "MVP",
     description:
       "A multi-tenant community platform built for reading groups, book clubs, and literary organizations. Warm, paper-toned design with group management, chat, announcements, and document sharing.",
+    metric: "Multi-tenant community platform",
     tags: [
       "Nest JS",
       "Next JS",
@@ -72,8 +107,8 @@ export const projects: Project[] = [
       "Azure",
     ],
     image: {
-      src: "images/transformlit-webapp-mvp.jpeg",
-      alt: "Transformlit Community Site",
+      src: "/images/transformlit-community-feed.jpg",
+      alt: "TransformLit community feed with a verse of the day, group updates, and announcements",
       overlayText: "Visit ↗",
     },
     primaryLink: {
@@ -86,6 +121,7 @@ export const projects: Project[] = [
         href: "https://transformlit.darjosh.dev/",
         label: "↗",
         title: "Live site",
+        ariaLabel: "Open Transformlit Community Site in new tab",
       },
     ],
   },
@@ -109,6 +145,7 @@ export const projects: Project[] = [
         href: "https://cantata.transformlit.com/",
         label: "↗",
         title: "Live site",
+        ariaLabel: "Open IBMF Cantata - Check-in System in new tab",
       },
     ],
   },
@@ -132,6 +169,7 @@ export const projects: Project[] = [
         href: "https://ibmfphils.org/",
         label: "↗",
         title: "Live site",
+        ariaLabel: "Open IBMF Phils - Wordpress Site in new tab",
       },
     ],
   },
@@ -140,6 +178,7 @@ export const projects: Project[] = [
     badge: "POC",
     description:
       "A prototype energy monitoring dashboard that visualizes power consumption data in real time — built to demonstrate extracting power data from an SDM via USB Bus.",
+    metric: "Real-time monitoring across 3 IoT devices",
     tags: ["React", "NodeJS", "MySQL", "Python", "Charts"],
     image: {
       src: "/images/smartpower.png",
@@ -156,7 +195,7 @@ export const projects: Project[] = [
         href: "https://smartpower.darjosh.dev/",
         label: "↗",
         title: "Live site",
-        ariaLabel: "Open SmartPower Monitor live site",
+        ariaLabel: "Open SmartPower Monitor in new tab",
       },
     ],
   },
@@ -181,6 +220,7 @@ export const projects: Project[] = [
         href: "https://apkpure.net/transformlit-app/com.transformlit.app",
         label: "↗",
         title: "APK Pure",
+        ariaLabel: "Open Transformlit App in new tab",
       },
     ],
   },
@@ -205,7 +245,7 @@ export const projects: Project[] = [
         href: "https://eventfulph.darjosh.dev/",
         label: "↗",
         title: "Live site",
-        ariaLabel: "Open Eventful live site",
+        ariaLabel: "Open Eventful in new tab",
       },
     ],
   },

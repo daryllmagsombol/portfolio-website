@@ -23,6 +23,7 @@ Personal portfolio website built with **React 19 + TypeScript + Vite**. Showcase
 | Project | Stack |
 |---|---|
 | [Daryll & Hannah](https://daryllandhannah.com) 💍 — Wedding site | React, Node.js, MySQL, Azure |
+| [PPCRV Election Monitoring](https://results.ppcrv.org/analytics) — [GitHub](https://github.com/daryllmagsombol/ppcrv-election-monitoring) | Next.js, TypeScript, Tailwind CSS, AWS, DuckDB |
 | [Blink Social](https://blink.darjosh.dev) | NestJS, Next.js, PostgreSQL, Prisma, Azure |
 | [Transformlit Community Site](https://transformlit.darjosh.dev) 📚 — MVP | NestJS, Next.js, PostgreSQL, Prisma, Azure |
 | [IBMF Cantata Check-in](https://cantata.transformlit.com) 🎵 | React, Node.js, MySQL, Azure |

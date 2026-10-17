@@ -1,106 +1,121 @@
-import { ButtonLink } from "./components/ButtonLink";
-import { CertificationCard } from "./components/CertificationCard";
-import { ExperienceCard } from "./components/ExperienceCard";
-import { Footer } from "./components/Footer";
-import { HeroSection } from "./components/HeroSection";
+import { lazy, Suspense, useEffect } from "react";
+import { CursorGlow } from "./components/CursorGlow";
+import { NoiseOverlay } from "./components/NoiseOverlay";
+import { GridOverlay } from "./components/GridOverlay";
+import { ErrorBoundary } from "./components/ErrorBoundary";
 import { NavBar } from "./components/NavBar";
-import { ProjectCard } from "./components/ProjectCard";
-import { SectionHeader } from "./components/SectionHeader";
-import { SkillsGrid } from "./components/SkillsGrid";
-import { SocialLinks } from "./components/SocialLinks";
-import { TextParts } from "./components/TextParts";
-import { aboutCta, aboutParagraphs, aboutSkillsTitle } from "./data/about";
-import { certifications, certificationsNoteParts } from "./data/certifications";
-import { contactCta, contactDescription } from "./data/contact";
-import { experience } from "./data/experience";
+import { Footer } from "./components/Footer";
+import { HeroSection } from "./components/sections/HeroSection";
+import { ProjectSection } from "./components/sections/ProjectSection";
+import { ExperienceSection } from "./components/sections/ExperienceSection";
+import { AboutSection } from "./components/sections/AboutSection";
+import { CertificationsSection } from "./components/sections/CertificationsSection";
+import { ContactSection } from "./components/sections/ContactSection";
 import { hero } from "./data/hero";
-import { navCta, navLinks } from "./data/nav";
 import { projects, projectsGitHubNoteParts } from "./data/projects";
-import { sections } from "./data/sections";
+import { experience } from "./data/experience";
+import { aboutParagraphs, aboutCta, aboutSkillsTitle } from "./data/about";
+import { certifications, certificationsNoteParts } from "./data/certifications";
+import { contactDescription, contactCta } from "./data/contact";
 import { skills } from "./data/skills";
 import { socialLinks } from "./data/socials";
-import { useScrollReveal } from "./hooks/useScrollReveal";
+import { sections } from "./data/sections";
+import { navLinks, navCta } from "./data/nav";
+import { useScrollAnimation } from "./hooks/useScrollAnimation";
+import { morphSectionColors } from "./hooks/useScrollAnimation";
+import { SectionProvider } from "./context/SectionContext";
+import { startPerfMonitor, stopPerfMonitor } from "./hooks/usePerformanceMode";
+import { useSection } from "./context/useSection";
 
-function App() {
-  useScrollReveal();
+// Code-split the WebGL background: three.js + R3F are heavy (~1MB raw), and the
+// canvas is decorative — it must not block first paint. The chunk loads lazily
+// on idle; Suspense keeps a null placeholder so layout is unaffected.
+const WorldBackground = lazy(() =>
+  import("./components/WorldBackground").then((m) => ({ default: m.WorldBackground }))
+);
+
+/**
+ * Inner App that reads the active section from SectionContext (single observer
+ * owned by SectionProvider) and triggers the per-section color morph.
+ */
+function AppContent() {
+  const activeSection = useSection();
+
+  useEffect(() => {
+    morphSectionColors(activeSection);
+  }, [activeSection]);
 
   return (
     <>
+      <NoiseOverlay />
+      <GridOverlay />
+      <ErrorBoundary>
+        <Suspense fallback={null}>
+          <WorldBackground />
+        </Suspense>
+      </ErrorBoundary>
       <NavBar links={navLinks} cta={navCta} />
-      <main>
+      <main id="main" className="relative z-10">
         <HeroSection content={hero} />
-
-        <section id="projects" className="section">
-          <div className="container">
-            <SectionHeader {...sections.projects} />
-            <div className="projects-grid">
-              {projects.map((project) => (
-                <ProjectCard key={project.title} project={project} />
-              ))}
-            </div>
-            <p className="projects-note reveal">
-              <TextParts parts={projectsGitHubNoteParts} />
-            </p>
-          </div>
-        </section>
-
-        <section id="experience" className="section section--alt">
-          <div className="container">
-            <SectionHeader {...sections.experience} />
-            <div className="experience-list">
-              {experience.map((item) => (
-                <ExperienceCard key={item.period} item={item} />
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section id="about" className="section">
-          <div className="container">
-            <SectionHeader {...sections.about} />
-            <div className="about-grid">
-              <div className="about-text reveal">
-                {aboutParagraphs.map((paragraph, index) => (
-                  <p key={`about-${index}`}>
-                    <TextParts parts={paragraph.parts} />
-                  </p>
-                ))}
-                <ButtonLink {...aboutCta} className="about-cta" />
-              </div>
-              <div className="about-skills reveal">
-                <h3 className="skills-title mono">{aboutSkillsTitle}</h3>
-                <SkillsGrid skills={skills} />
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section id="certifications" className="section section--alt">
-          <div className="container">
-            <SectionHeader {...sections.certifications} />
-            <div className="certs-grid">
-              {certifications.map((item) => (
-                <CertificationCard key={item.title} item={item} />
-              ))}
-            </div>
-            <p className="certs-note reveal">
-              <TextParts parts={certificationsNoteParts} />
-            </p>
-          </div>
-        </section>
-
-        <section id="contact" className="section">
-          <div className="container">
-            <SectionHeader {...sections.contact} />
-            <div className="contact-content reveal">
-              <p className="contact-desc">{contactDescription}</p>
-              <ButtonLink {...contactCta} size="large" />
-              <SocialLinks links={socialLinks} />
-            </div>
-          </div>
-        </section>
+        <ProjectSection
+          projects={projects}
+          header={sections.projects}
+          sectionIndex={1}
+          noteParts={projectsGitHubNoteParts}
+        />
+        <ExperienceSection
+          items={experience}
+          header={sections.experience}
+          sectionIndex={2}
+        />
+        <AboutSection
+          paragraphs={aboutParagraphs}
+          skills={skills}
+          skillsTitle={aboutSkillsTitle}
+          cta={aboutCta}
+          header={sections.about}
+          sectionIndex={3}
+        />
+        <CertificationsSection
+          items={certifications}
+          header={sections.certifications}
+          sectionIndex={4}
+          noteParts={certificationsNoteParts}
+        />
+        <ContactSection
+          description={contactDescription}
+          cta={contactCta}
+          socialLinks={socialLinks}
+          header={sections.contact}
+          sectionIndex={5}
+        />
       </main>
       <Footer />
+    </>
+  );
+}
+
+function App() {
+  useScrollAnimation();
+
+  // Start the adaptive perf monitor on mount; it auto-disables the WebGL
+  // canvas + Lenis smooth scroll + backdrop blur when frame rate drops or the
+  // device looks low-end.
+  useEffect(() => {
+    startPerfMonitor();
+    return () => stopPerfMonitor();
+  }, []);
+
+  return (
+    <>
+      {/* Skip link: first focusable element, hidden until focused. */}
+      <a href="#main" className="skip-link">
+        Skip to content
+      </a>
+      <CursorGlow />
+      <SectionProvider>
+        <AppContent />
+      </SectionProvider>
     </>
   );
 }
