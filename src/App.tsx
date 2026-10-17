@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect } from "react";
 import { CursorGlow } from "./components/CursorGlow";
 import { NoiseOverlay } from "./components/NoiseOverlay";
 import { GridOverlay } from "./components/GridOverlay";
+import { ErrorBoundary } from "./components/ErrorBoundary";
 import { NavBar } from "./components/NavBar";
 import { Footer } from "./components/Footer";
 import { HeroSection } from "./components/sections/HeroSection";
@@ -48,9 +49,11 @@ function AppContent() {
     <>
       <NoiseOverlay />
       <GridOverlay />
-      <Suspense fallback={null}>
-        <WorldBackground />
-      </Suspense>
+      <ErrorBoundary>
+        <Suspense fallback={null}>
+          <WorldBackground />
+        </Suspense>
+      </ErrorBoundary>
       <NavBar links={navLinks} cta={navCta} />
       <main id="main" className="relative z-10">
         <HeroSection content={hero} />

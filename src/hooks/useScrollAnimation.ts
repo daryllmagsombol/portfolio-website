@@ -3,7 +3,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import { prefersReducedMotion, setLenis, setupAnchorSmoothing } from "./lenis";
-import { isPerfLow } from "./usePerformanceMode";
+import { usePerfMode } from "./usePerformanceMode";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -51,6 +51,10 @@ export const sectionColors: SectionColorConfig[] = [
 
 export function useScrollAnimation() {
   const lenisRef = useRef<Lenis | null>(null);
+  // Live perf mode: the monitor (started by App) can flip to "low" after this
+  // effect first runs, so we must react to it — not read it once — to tear
+  // Lenis's rAF loop down on low-power devices.
+  const perfMode = usePerfMode();
 
   useEffect(() => {
     // Reduced motion OR adaptive perf-low mode: skip Lenis entirely — native
@@ -58,7 +62,7 @@ export function useScrollAnimation() {
     // wheel event, which drops frames hard on throttled / low-power devices.
     // setupAnchorSmoothing no-ops when the singleton is null, so anchor clicks
     // still get the native browser jump.
-    if (prefersReducedMotion() || isPerfLow()) {
+    if (prefersReducedMotion() || perfMode === "low") {
       // Throttle ScrollTrigger scroll callbacks to once per animation frame.
       // Default behavior re-checks every trigger on every scroll event, which
       // is the dominant scroll-time cost in perf-low mode.
@@ -98,7 +102,7 @@ export function useScrollAnimation() {
       lenis.destroy();
       gsap.ticker.remove(raf);
     };
-  }, []);
+  }, [perfMode]);
 
   return lenisRef;
 }

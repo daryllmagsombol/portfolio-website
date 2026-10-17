@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
+import type Lenis from "lenis";
 import type { ExternalLink, NavLink } from "../types";
 import { useSection } from "../context/useSection";
-import { getLenis, lenisStart, lenisStop, prefersReducedMotion } from "../hooks/lenis";
+import { getLenis, lenisStart, lenisStop, subscribeLenis } from "../hooks/lenis";
 
 const SECTION_IDS = ["hero", "projects", "experience", "about", "certifications", "contact"];
 
@@ -17,27 +18,39 @@ export function NavBar({ links, cta }: NavBarProps) {
   const navLinksRef = useRef<HTMLUListElement | null>(null);
   const toggleRef = useRef<HTMLButtonElement | null>(null);
 
-  // Scroll shadow detection: prefer Lenis's scroll event so the navbar
-  // styling updates on the same frame as the smoothed scroll position.
-  // Falls back to the native scroll listener when Lenis isn't running
-  // (reduced-motion mode, or before useScrollAnimation's effect mounts).
+  // Scroll shadow detection: the native window "scroll" listener is the
+  // always-on baseline (Lenis drives the real scroll position, so this keeps
+  // working in every mode). Additionally, when the Lenis singleton becomes
+  // available we attach its own "scroll" handler so styling updates on the
+  // same frame as the smoothed scroll. The singleton is created by App's
+  // effect after this child mounts, so we subscribe rather than read once.
   useEffect(() => {
-    const lenis = getLenis();
-    if (lenis && !prefersReducedMotion()) {
-      const onLenisScroll = ({ scroll }: { scroll: number }) =>
-        setIsScrolled(scroll > 20);
-      lenis.on("scroll", onLenisScroll);
-      // Initialize once in case the page is already scrolled (e.g., anchor).
-      onLenisScroll({ scroll: window.scrollY });
-      return () => {
-        lenis.off("scroll", onLenisScroll);
-      };
-    }
-
     const onScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll(); // init
-    return () => window.removeEventListener("scroll", onScroll);
+
+    const onLenisScroll = ({ scroll }: { scroll: number }) =>
+      setIsScrolled(scroll > 20);
+    let attached: Lenis | null = null;
+    const syncLenis = (lenis: Lenis | null) => {
+      if (lenis === attached) return;
+      if (attached) attached.off("scroll", onLenisScroll);
+      attached = lenis;
+      if (lenis) {
+        lenis.on("scroll", onLenisScroll);
+        // Initialize in case the page is already scrolled (e.g., anchor).
+        onLenisScroll({ scroll: window.scrollY });
+      }
+    };
+
+    syncLenis(getLenis());
+    const unsubscribe = subscribeLenis(syncLenis);
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      unsubscribe();
+      if (attached) attached.off("scroll", onLenisScroll);
+    };
   }, []);
 
   // Scroll lock: Lenis stop is primary (its `.lenis-stopped` class sets

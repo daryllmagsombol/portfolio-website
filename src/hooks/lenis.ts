@@ -11,6 +11,13 @@ import Lenis from "lenis";
  */
 let instance: Lenis | null = null;
 
+/**
+ * Consumers (NavBar) subscribe here to learn when the singleton is set/cleared.
+ * Needed because child effects run before the parent effect that creates Lenis,
+ * so a one-shot `getLenis()` at mount always sees null.
+ */
+const listeners = new Set<(lenis: Lenis | null) => void>();
+
 function reducedMotionMedia(): MediaQueryList | null {
   return typeof window !== "undefined"
     ? window.matchMedia("(prefers-reduced-motion: reduce)")
@@ -25,10 +32,19 @@ export function prefersReducedMotion(): boolean {
 /** Registered by useScrollAnimation's effect; nulled on teardown. */
 export function setLenis(lenis: Lenis | null): void {
   instance = lenis;
+  listeners.forEach((cb) => cb(lenis));
 }
 
 export function getLenis(): Lenis | null {
   return instance;
+}
+
+/** Subscribe to singleton set/clear events; returns an unsubscribe function. */
+export function subscribeLenis(cb: (lenis: Lenis | null) => void): () => void {
+  listeners.add(cb);
+  return () => {
+    listeners.delete(cb);
+  };
 }
 
 export function lenisStop(): void {

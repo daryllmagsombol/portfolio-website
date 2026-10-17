@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1200, initial-scale=1" />
+    <title>Daryll Magsombol — Software Engineer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400&family=Fraunces:opsz,wght@9..144,600&family=JetBrains+Mono:wght@400&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        color-scheme: dark;
+        /* Matched to src/index.css, not the site's scroll-adapted colors. */
+        --section-bg: oklch(0.1149 0.0000 89.88);
+        --section-accent: oklch(0.8799 0.2100 156.86);
+        --section-glow: oklch(0.8799 0.2100 156.86 / 0.15);
+        --text-primary: #f5f3ff;
+        --text-muted: #a1a1b5;
+        --border: rgba(255, 255, 255, 0.1);
+        --font-sans: "Space Grotesk", sans-serif;
+        --font-serif: "Fraunces", serif;
+        --font-mono: "JetBrains Mono", monospace;
+        --radius: 8px;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        width: 1200px;
+        height: 630px;
+        margin: 0;
+        overflow: hidden;
+      }
+
+      body {
+        background: var(--section-bg);
+        color: var(--text-primary);
+        font-family: var(--font-sans);
+        font-weight: 400;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .card {
+        width: 1200px;
+        height: 630px;
+        padding: 64px;
+        display: flex;
+        flex-direction: column;
+        background: radial-gradient(
+          ellipse at 100% 0%,
+          var(--section-glow),
+          transparent 62%
+        );
+      }
+
+      .accent-rule {
+        width: 64px;
+        height: 4px;
+        flex: 0 0 auto;
+        align-self: center;
+        border-radius: var(--radius);
+        background: var(--section-accent);
+      }
+
+      .identity {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding-bottom: 16px;
+        text-align: center;
+      }
+
+      h1 {
+        margin: 0;
+        font-family: var(--font-serif);
+        font-size: 112px;
+        font-weight: 600;
+        line-height: 1.05;
+        letter-spacing: -0.025em;
+        white-space: nowrap;
+      }
+
+      .role {
+        margin: 24px 0 0;
+        color: var(--section-accent);
+        font-family: var(--font-mono);
+        font-size: 36px;
+        line-height: 1.4;
+      }
+
+      .tech {
+        margin: 0;
+        color: var(--text-muted);
+        font-family: var(--font-sans);
+        font-size: 28px;
+        line-height: 1.5;
+      }
+
+      footer {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 32px;
+        padding-top: 32px;
+        border-top: 1px solid var(--border);
+        font-family: var(--font-mono);
+        font-size: 26px;
+        line-height: 1.5;
+      }
+
+      footer p {
+        white-space: nowrap;
+      }
+
+      .url {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="card">
+      <div class="accent-rule" aria-hidden="true"></div>
+      <section class="identity" aria-labelledby="name">
+        <h1 id="name">Daryll Magsombol</h1>
+        <p class="role">Software Engineer</p>
+      </section>
+      <footer>
+        <p class="tech">React · React Native · TypeScript</p>
+        <p class="url">daryllmagsombol.com</p>
+      </footer>
+    </main>
+  </body>
+</html>
